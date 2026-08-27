@@ -7,24 +7,24 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#FAFAF8">
-<title>UPI Gift — Mobile Concept Prototype (Simulated Money)</title>
-<meta name="description" content="UPI Gift is a mobile concept prototype: money as a redeemable code. Simulated money only — not connected to real UPI transactions.">
+<title>UPI Air — Mobile Concept Prototype (Simulated Money)</title>
+<meta name="description" content="UPI Air is a mobile concept prototype: money as a redeemable code. Simulated money only — not connected to real UPI transactions.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* ============ Tokens ============ */
 :root{
-  --color-bg:#FAFAF8;
+  --color-bg:#FAFAF9;
   --color-surface:#FFFFFF;
-  --color-surface-sunken:#F2F1EE;
-  --color-text-primary:#101014;
-  --color-text-secondary:#5C5C66;
-  --color-border:rgba(16,16,20,.10);
-  --color-border-strong:rgba(16,16,20,.18);
-  --color-accent-solid:#5A3DF0;
-  --color-accent-hover:#4A2ED6;
-  --color-accent-soft:#EFEBFF;
+  --color-surface-sunken:#F1F2F4;
+  --color-text-primary:#0E0F14;
+  --color-text-secondary:#5A5E6B;
+  --color-border:rgba(14,15,20,.10);
+  --color-border-strong:rgba(14,15,20,.18);
+  --color-accent-solid:#2563EB;
+  --color-accent-hover:#1D4ED8;
+  --color-accent-soft:#E8F0FE;
   --color-accent-on-solid:#FFFFFF;
   --color-success-solid:#0C8A5F;
   --color-success-soft:#E2F6ED;
@@ -32,12 +32,11 @@
   --color-danger-soft:#FDECEA;
   --color-warning-solid:#B54708;
   --color-warning-soft:#FDF1E3;
-  --color-live-solid:#E0245E;
-  --color-dark-solid:#141419;
-  --color-dark-text:#F5F4F0;
-  --color-backdrop:#17171B;
-  --shadow-card:0 1px 2px rgba(16,16,20,.05),0 10px 30px -12px rgba(16,16,20,.12);
-  --shadow-pop:0 24px 60px -20px rgba(90,61,240,.35);
+  --color-dark-solid:#12141A;
+  --color-dark-text:#F5F6F8;
+  --color-backdrop:#17181D;
+  --shadow-card:0 1px 2px rgba(14,15,20,.05),0 10px 30px -12px rgba(14,15,20,.12);
+  --shadow-pop:0 24px 60px -20px rgba(37,99,235,.4);
   --radius-xl:24px; --radius-lg:20px; --radius-md:14px; --radius-sm:10px;
   --font-display:"Sora",system-ui,sans-serif;
   --font-body:"Inter",system-ui,sans-serif;
@@ -56,7 +55,7 @@ body{
 }
 h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.12;letter-spacing:-.02em}
 p{text-wrap:pretty}
-code,.mono{font-family:var(--font-mono);overflow-wrap:break-word}
+.mono{font-family:var(--font-mono);overflow-wrap:break-word}
 .num{font-variant-numeric:tabular-nums}
 a{color:var(--color-accent-solid)}
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit;user-select:none;-webkit-user-select:none}
@@ -99,7 +98,7 @@ header.appbar{
 }
 .appbar-inner{display:flex;align-items:center;gap:10px;padding:12px 16px}
 .logo{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:800;font-size:17.5px;letter-spacing:-.02em;color:var(--color-text-primary);text-decoration:none}
-.logo-mark{inline-size:32px;block-size:32px;border-radius:10px;background:linear-gradient(135deg in oklab,var(--color-accent-solid),#9A7BFF);display:grid;place-items:center;color:#fff;font-size:15px;box-shadow:var(--shadow-pop)}
+.logo-mark{inline-size:32px;block-size:32px;border-radius:10px;background:linear-gradient(135deg in oklab,var(--color-accent-solid),#38BDF8);display:grid;place-items:center;color:#fff;font-size:15px;box-shadow:var(--shadow-pop)}
 .logo-badge{font-family:var(--font-body);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--color-accent-soft);color:var(--color-accent-solid);padding:3px 7px;border-radius:999px}
 .balance-pill{
   margin-inline-start:auto;display:flex;align-items:center;gap:7px;
@@ -114,7 +113,7 @@ main{padding:20px 16px calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 32px
 .page-head{margin-block-end:18px;display:grid;gap:10px;justify-items:start}
 .page-head h1{font-size:27px}
 .page-head .sub{font-size:14.5px;color:var(--color-text-secondary);margin-block-start:-4px}
-.section{margin-block-start:30px}
+.section{margin-block-start:28px}
 .grid{display:grid;gap:12px}
 .grid.cols-2{grid-template-columns:1fr 1fr}
 
@@ -128,7 +127,6 @@ main{padding:20px 16px calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 32px
 .pill.expired{background:var(--color-warning-soft);color:var(--color-warning-solid)}
 .pill.cancelled{background:var(--color-danger-soft);color:var(--color-danger-solid)}
 .pill.neutral{background:var(--color-surface-sunken);color:var(--color-text-secondary)}
-.pill.live{background:#FDE7EF;color:var(--color-live-solid)}
 
 /* ============ Buttons ============ */
 .btn{
@@ -138,7 +136,7 @@ main{padding:20px 16px calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 32px
   transition:scale 200ms ease-out,background-color 160ms ease-out,color 160ms ease-out,border-color 160ms ease-out,box-shadow 160ms ease-out;
 }
 .btn:active{scale:.97}
-.btn-primary{background:var(--color-accent-solid);color:var(--color-accent-on-solid);box-shadow:0 10px 24px -10px rgba(90,61,240,.55)}
+.btn-primary{background:var(--color-accent-solid);color:var(--color-accent-on-solid);box-shadow:0 10px 24px -10px rgba(37,99,235,.5)}
 .btn-dark{background:var(--color-dark-solid);color:var(--color-dark-text)}
 .btn-ghost{background:var(--color-surface);border:1px solid var(--color-border-strong);color:var(--color-text-primary)}
 .btn-danger-soft{background:var(--color-danger-soft);color:var(--color-danger-solid)}
@@ -147,12 +145,12 @@ main{padding:20px 16px calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 32px
 .btn[disabled]{opacity:.55;cursor:not-allowed}
 @media(hover:hover){
   .btn-primary:hover{background:var(--color-accent-hover)}
-  .btn-dark:hover{background:#2A2A33}
+  .btn-dark:hover{background:#262A33}
   .btn-ghost:hover{border-color:var(--color-text-primary)}
   .chip:hover{border-color:var(--color-accent-solid);color:var(--color-accent-solid)}
 }
 
-/* Sticky thumb-reach CTA — sits just above the tab bar while scrolling */
+/* Sticky thumb-reach CTA */
 .sticky-cta{
   position:sticky;bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 10px);
   padding-block-start:18px;margin-block-start:6px;
@@ -169,10 +167,10 @@ main{padding:20px 16px calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 32px
   inline-size:100%;min-block-size:52px;padding:13px 16px;border-radius:var(--radius-md);
   border:1.5px solid var(--color-border-strong);background:var(--color-surface);
   transition:border-color 160ms ease-out,box-shadow 160ms ease-out;font-variant-numeric:tabular-nums;
-  font-size:16px; /* prevents iOS zoom-on-focus */
+  font-size:16px;
 }
 .input:focus{outline:none;border-color:var(--color-accent-solid);box-shadow:0 0 0 4px var(--color-accent-soft)}
-.input.code-input{font-family:var(--font-mono);font-size:17px;font-weight:700;letter-spacing:.1em;text-align:center;min-block-size:60px}
+.input.code-input{font-family:var(--font-mono);font-size:17px;font-weight:700;letter-spacing:.08em;text-align:center;min-block-size:60px;text-transform:uppercase}
 .input.pin-input{font-family:var(--font-mono);font-size:26px;letter-spacing:.5em;text-align:center;max-inline-size:240px;min-block-size:64px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{
@@ -195,135 +193,92 @@ main{padding:20px 16px calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 32px
 .error-box strong{display:block;font-size:14px}
 .error-box p{font-size:13px;color:#7A271D}
 
-/* ============ Gift card ============ */
-.giftcard{
+/* ============ Code card (the hero object) ============ */
+.aircard{
   position:relative;overflow:hidden;border-radius:var(--radius-xl);color:#fff;
-  background:linear-gradient(140deg in oklab,#3B1FA8 0%,var(--color-accent-solid) 48%,#9A7BFF 100%);
+  background:linear-gradient(140deg in oklab,#1E3A8A 0%,var(--color-accent-solid) 52%,#38BDF8 100%);
   padding:22px;box-shadow:var(--shadow-pop);
 }
-.giftcard::before{content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(600px 200px at 85% -10%,rgba(255,255,255,.28),transparent 60%)}
-.giftcard .gc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative}
-.giftcard .gc-amt{font-family:var(--font-display);font-size:42px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
-.giftcard .gc-amt-lbl{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-block-end:7px}
-.giftcard .gc-code{
-  margin-block-start:18px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);
-  border-radius:var(--radius-md);padding:14px 14px;font-family:var(--font-mono);
-  font-size:16px;font-weight:700;letter-spacing:.08em;text-align:center;overflow-wrap:break-word;position:relative;
+.aircard::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(600px 200px at 85% -10%,rgba(255,255,255,.3),transparent 60%)}
+.aircard .ac-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative}
+.aircard .ac-amt{font-family:var(--font-display);font-size:42px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.aircard .ac-amt-lbl{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.78;margin-block-end:7px}
+.aircard .ac-code{
+  margin-block-start:18px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);
+  border-radius:var(--radius-md);padding:14px;font-family:var(--font-mono);
+  font-size:17px;font-weight:700;letter-spacing:.12em;text-align:center;overflow-wrap:break-word;position:relative;
 }
-.giftcard .gc-pin{margin-block-start:10px;text-align:center;font-size:13.5px;font-weight:600;letter-spacing:.06em;position:relative}
-.giftcard .gc-pin b{font-family:var(--font-mono);font-size:17px;letter-spacing:.35em}
-.giftcard .gc-meta{display:flex;flex-wrap:wrap;gap:7px;margin-block-start:15px;font-size:11px;font-weight:600;position:relative}
-.giftcard .gc-meta span{background:rgba(0,0,0,.22);padding:5px 10px;border-radius:999px;white-space:nowrap}
-.gc-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-block-start:14px}
+.aircard .ac-pin{margin-block-start:10px;text-align:center;font-size:13.5px;font-weight:600;letter-spacing:.06em;position:relative}
+.aircard .ac-pin b{font-family:var(--font-mono);font-size:17px;letter-spacing:.35em}
+.aircard .ac-meta{display:flex;flex-wrap:wrap;gap:7px;margin-block-start:15px;font-size:11px;font-weight:600;position:relative}
+.aircard .ac-meta span{background:rgba(0,0,0,.22);padding:5px 10px;border-radius:999px;white-space:nowrap}
+.ac-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-block-start:14px}
 
 /* ============ Stats ============ */
 .stat{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:15px 16px;box-shadow:var(--shadow-card)}
 .stat .k{font-size:11.5px;font-weight:650;color:var(--color-text-secondary);letter-spacing:.02em}
 .stat .v{font-family:var(--font-display);font-size:21px;font-weight:800;margin-block-start:5px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.progress{block-size:9px;border-radius:999px;background:var(--color-surface-sunken);overflow:hidden}
-.progress > i{display:block;block-size:100%;border-radius:999px;background:linear-gradient(90deg in oklab,var(--color-accent-solid),#9A7BFF);transition:width 600ms ease-out}
 
-/* ============ Steps / flow (vertical, mobile) ============ */
-.flow{display:grid;gap:10px}
-.flow .step{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-card);display:flex;gap:14px;align-items:flex-start}
-.flow .step .n{flex:none;inline-size:32px;block-size:32px;border-radius:50%;background:var(--color-accent-soft);color:var(--color-accent-solid);display:grid;place-items:center;font-family:var(--font-display);font-weight:800;font-size:14px}
-.flow .step h3{font-size:15.5px;margin-block-end:4px}
-.flow .step p{font-size:13px;color:var(--color-text-secondary)}
-.arch{display:grid;gap:6px;margin-block:14px;justify-items:center}
-.arch .node{inline-size:100%;background:var(--color-surface);border:1.5px solid var(--color-border-strong);border-radius:var(--radius-md);padding:13px;text-align:center;font-weight:650;font-size:13.5px;display:grid;gap:2px}
-.arch .node small{font-weight:500;color:var(--color-text-secondary);font-size:11.5px}
-.arch .arr{font-size:16px;color:var(--color-text-secondary);line-height:1}
-
-/* ============ Table (full-bleed swipe) ============ */
-.tbl-wrap{overflow-x:auto;margin-inline:-16px;border-block:1px solid var(--color-border);background:var(--color-surface);-webkit-overflow-scrolling:touch;position:relative}
-table{border-collapse:collapse;inline-size:100%;min-inline-size:560px;font-size:13px}
-th,td{padding:13px 14px;text-align:start;border-block-end:1px solid var(--color-border);vertical-align:top}
-th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-secondary);background:var(--color-surface-sunken)}
-tr:last-child td{border-block-end:0}
-td .yes{color:var(--color-success-solid);font-weight:700}
-td .no{color:var(--color-danger-solid);font-weight:700}
-.swipe-hint{text-align:center;font-size:11.5px;color:var(--color-text-secondary);margin-block-start:8px}
-
-/* ============ Tabs & gift rows ============ */
-.tabs{display:flex;gap:6px;overflow-x:auto;padding:4px;background:var(--color-surface-sunken);border-radius:999px;margin-block-end:14px;scrollbar-width:none;margin-inline:-2px}
+/* ============ Tabs & code rows ============ */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:4px;background:var(--color-surface-sunken);border-radius:999px;margin-block-end:14px;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tabs button{min-block-size:38px;padding:8px 14px;border-radius:999px;font-weight:650;font-size:12.5px;color:var(--color-text-secondary);white-space:nowrap;transition:scale 200ms ease-out,background-color 160ms ease-out,color 160ms ease-out}
 .tabs button:active{scale:.96}
 .tabs button.selected{background:var(--color-dark-solid);color:var(--color-dark-text)}
 .tabs .cnt{font-variant-numeric:tabular-nums;opacity:.7;margin-inline-start:4px}
-.gift-row{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:15px 16px;box-shadow:var(--shadow-card);display:grid;gap:10px}
-.gift-row .top{display:flex;align-items:center;gap:10px}
-.gift-row .amt{font-family:var(--font-display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
-.gift-row .top .pill{margin-inline-start:auto}
-.gift-row .code{font-family:var(--font-mono);font-weight:700;font-size:13.5px;letter-spacing:.05em;overflow-wrap:break-word}
-.gift-row .meta{font-size:12px;color:var(--color-text-secondary);margin-block-start:2px}
-.gift-row .actions{display:flex;gap:8px}
-.gift-row .actions .btn{flex:1}
+.code-row{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:15px 16px;box-shadow:var(--shadow-card);display:grid;gap:10px}
+.code-row .top{display:flex;align-items:center;gap:10px}
+.code-row .amt{font-family:var(--font-display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.code-row .top .pill{margin-inline-start:auto}
+.code-row .code{font-family:var(--font-mono);font-weight:700;font-size:13px;letter-spacing:.05em;overflow-wrap:break-word}
+.code-row .meta{font-size:12px;color:var(--color-text-secondary);margin-block-start:2px}
+.code-row .actions{display:flex;gap:8px}
+.code-row .actions .btn{flex:1}
 .empty{border:1.5px dashed var(--color-border-strong);border-radius:var(--radius-lg);padding:40px 22px;text-align:center;color:var(--color-text-secondary)}
 .empty .big{font-size:32px;margin-block-end:10px}
 .empty strong{display:block;color:var(--color-text-primary);font-size:16px;margin-block-end:6px}
 
-/* ============ Hero & story ============ */
+/* ============ Home ============ */
 .hero{padding:26px 0 4px;text-align:center}
 .hero h1{font-size:clamp(42px,12vw,56px);font-weight:800;letter-spacing:-.04em}
-.hero h1 .accent{background:linear-gradient(100deg in oklab,var(--color-accent-solid),#9A7BFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1 .accent{background:linear-gradient(100deg in oklab,var(--color-accent-solid),#38BDF8);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero .sub{margin:16px auto 0;font-size:15.5px;color:var(--color-text-secondary);max-inline-size:34ch}
 .hero .cta{display:grid;gap:10px;margin-block-start:24px}
-.mantra{display:grid;gap:10px;margin-block-start:26px;text-align:start}
-.mantra .m{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:17px;font-family:var(--font-display);font-weight:700;font-size:14.5px;box-shadow:var(--shadow-card)}
-.mantra .m small{display:block;font-family:var(--font-body);font-weight:500;color:var(--color-text-secondary);font-size:12.5px;margin-block-start:5px}
-.story h2{font-size:23px}
-.story p{color:var(--color-text-secondary);font-size:14.5px}
+.chat-meta{font-size:11.5px;color:var(--color-text-secondary);font-weight:600;margin-block-start:14px}
+.chat-bubble{background:#DCF8C6;border-radius:14px 14px 14px 4px;padding:12px 14px;font-size:13.5px;margin-block-start:6px;box-shadow:var(--shadow-card)}
 .mini-flow{display:grid;gap:10px;margin-block-start:16px}
 .mini-flow .mf{display:flex;gap:11px;align-items:flex-start}
 .mini-flow .mf .n{flex:none;inline-size:26px;block-size:26px;border-radius:50%;background:var(--color-dark-solid);color:var(--color-dark-text);display:grid;place-items:center;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums}
 .mini-flow .mf p{font-size:13.5px;color:var(--color-text-primary)}
-.chat-bubble{background:#DCF8C6;border-radius:14px 14px 14px 4px;padding:12px 14px;font-size:13.5px;margin-block-start:14px;box-shadow:var(--shadow-card)}
-.chat-meta{font-size:11.5px;color:var(--color-text-secondary);font-weight:600;margin-block-start:12px}
+.story h2{font-size:22px}
+.story p{color:var(--color-text-secondary);font-size:14px}
 .phone{border:1.5px solid var(--color-border-strong);border-radius:28px;padding:12px;background:var(--color-surface);box-shadow:var(--shadow-card);max-inline-size:300px;margin-inline:auto}
-.phone .screen{background:var(--color-surface-sunken);border-radius:18px;padding:16px;min-block-size:120px;display:grid;place-content:center;gap:6px;text-align:center}
+.phone .screen{background:var(--color-surface-sunken);border-radius:18px;padding:16px;min-block-size:104px;display:grid;place-content:center;gap:6px;text-align:center}
 .phone .dock{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-block-start:10px}
 .phone .dock div{text-align:center;font-size:10px;font-weight:650;color:var(--color-text-secondary);padding:7px 2px;border-radius:10px}
 .phone .dock .on{background:var(--color-accent-soft);color:var(--color-accent-solid)}
 .phone .dock .ic{font-size:16px;display:block;margin-block-end:2px}
 
-/* ============ Live mode ============ */
-.live-stage{background:var(--color-dark-solid);color:var(--color-dark-text);border-radius:var(--radius-xl);padding:30px 18px;text-align:center;position:relative;overflow:hidden}
-.live-stage::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(500px 260px at 50% -20%,rgba(90,61,240,.5),transparent 65%)}
-.live-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(224,36,94,.18);border:1px solid rgba(224,36,94,.5);color:#FF7AA8;font-weight:800;font-size:11px;letter-spacing:.16em;padding:6px 14px;border-radius:999px;text-transform:uppercase;position:relative}
-.live-badge .pulse{inline-size:8px;block-size:8px;border-radius:50%;background:var(--color-live-solid)}
-.live-amt{font-family:var(--font-display);font-size:clamp(56px,19vw,84px);font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;position:relative;line-height:1.05;margin-block-start:16px}
-.live-code{font-family:var(--font-mono);font-size:15px;font-weight:700;letter-spacing:.1em;background:rgba(255,255,255,.08);border:1px dashed rgba(255,255,255,.35);border-radius:var(--radius-md);padding:13px 14px;display:inline-block;margin-block-start:16px;overflow-wrap:break-word;position:relative;max-inline-size:100%}
-.live-status{margin-block-start:18px;font-size:15.5px;font-weight:650;position:relative;min-block-size:56px}
-.live-status .big-win{font-family:var(--font-display);font-size:30px;font-weight:800}
-.live-actions{display:grid;gap:9px;margin-block-start:20px;position:relative}
-.live-actions .row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.btn-on-dark{background:rgba(255,255,255,.14);color:#fff}
-.btn-on-dark-outline{background:transparent;color:#B9B8C4;border:1px solid rgba(255,255,255,.25)}
-.dots i{display:inline-block;inline-size:6px;block-size:6px;border-radius:50%;background:currentColor;margin-inline-start:4px;animation:blink 1.2s infinite}
-.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
-
-/* ============ Bottom tab bar (primary nav) ============ */
+/* ============ Bottom tab bar ============ */
 nav.tabbar{
   position:fixed;bottom:0;left:50%;transform:translateX(-50%);
   inline-size:min(var(--shell-w),100%);z-index:100;
-  display:grid;grid-template-columns:repeat(6,1fr);
+  display:grid;grid-template-columns:repeat(4,1fr);
   background:color-mix(in srgb,var(--color-surface) 94%,transparent);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border-block-start:1px solid var(--color-border);
-  padding:6px 2px calc(6px + env(safe-area-inset-bottom));
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom));
 }
 nav.tabbar a{
   display:grid;justify-items:center;gap:2px;text-decoration:none;
-  color:var(--color-text-secondary);font-size:9.5px;font-weight:650;
-  padding:6px 1px;border-radius:12px;min-block-size:46px;letter-spacing:.01em;
+  color:var(--color-text-secondary);font-size:10.5px;font-weight:650;
+  padding:6px 2px;border-radius:12px;min-block-size:46px;
   transition:color 160ms ease-out;
 }
-nav.tabbar a .ic{font-size:19px;line-height:1.2;transition:scale 200ms ease-out}
+nav.tabbar a .ic{font-size:20px;line-height:1.2;transition:scale 200ms ease-out}
 nav.tabbar a:active .ic{scale:.88}
 nav.tabbar a.active{color:var(--color-accent-solid)}
-nav.tabbar a.active .ic{transform:translateY(-1px)}
 
 /* ============ Bottom sheets ============ */
 .sheet-backdrop{position:fixed;inset:0;background:rgba(10,10,14,.5);z-index:110;display:grid;align-items:end;justify-items:center;animation:fadeIn 180ms ease-out}
@@ -336,9 +291,6 @@ nav.tabbar a.active .ic{transform:translateY(-1px)}
 .sheet .handle{inline-size:40px;block-size:4.5px;border-radius:99px;background:var(--color-border-strong);margin:2px auto 16px}
 .sheet h2{font-size:19px;margin-block-end:6px}
 .sheet .actions{display:grid;gap:9px;margin-block-start:18px}
-.code-list{display:grid;gap:6px;margin-block:14px;max-block-size:44dvh;overflow:auto}
-.code-list .row{display:flex;align-items:center;gap:10px;background:var(--color-surface-sunken);border-radius:var(--radius-sm);padding:9px 12px;font-size:12.5px}
-.code-list .row .mono{flex:1;font-weight:700;font-size:12px;overflow-wrap:break-word}
 
 /* ============ Toasts & confetti ============ */
 #toasts{position:fixed;inset-inline:0;bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 14px);display:grid;justify-items:center;gap:8px;z-index:120;pointer-events:none;padding-inline:16px}
@@ -363,13 +315,10 @@ footer.site p{max-inline-size:56ch;margin:0 auto 8px}
 @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes sheetUp{from{transform:translateY(60px);opacity:.5}to{transform:translateY(0);opacity:1}}
 @keyframes draw{to{stroke-dashoffset:0}}
-@keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
-@keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(224,36,94,.55)}55%{box-shadow:0 0 0 9px rgba(224,36,94,0)}}
 @media(prefers-reduced-motion:no-preference){
   .anim-rise{animation:riseIn 400ms ease-out both}
   .anim-rise.d1{animation-delay:55ms}.anim-rise.d2{animation-delay:110ms}.anim-rise.d3{animation-delay:165ms}.anim-rise.d4{animation-delay:220ms}
-  .live-badge .pulse{animation:pulseDot 1.6s infinite}
-  .giftcard.reveal{animation:popIn 460ms cubic-bezier(.2,.9,.3,1.2) both}
+  .aircard.reveal{animation:popIn 460ms cubic-bezier(.2,.9,.3,1.2) both}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
@@ -385,8 +334,8 @@ footer.site p{max-inline-size:56ch;margin:0 auto 8px}
   <header class="appbar">
     <div class="appbar-inner">
       <a class="logo" href="#/home">
-        <span class="logo-mark" aria-hidden="true">🎁</span>
-        <span>UPI&nbsp;Gift</span>
+        <span class="logo-mark" aria-hidden="true">💨</span>
+        <span>UPI&nbsp;Air</span>
         <span class="logo-badge">Concept</span>
       </a>
       <div class="balance-pill" title="Simulated demo balance">
@@ -399,7 +348,7 @@ footer.site p{max-inline-size:56ch;margin:0 auto 8px}
   <main id="view" tabindex="-1"></main>
 
   <footer class="site">
-    <p><strong>UPI Gift</strong> is an independent concept prototype exploring a “money as a code” claim model. It is <strong>not</strong> an official NPCI product, is not affiliated with or endorsed by NPCI or any UPI app, and uses simulated money only — no real UPI, bank, or payment systems are involved.</p>
+    <p><strong>UPI Air</strong> is an independent concept prototype of a “money as a code” feature. It is <strong>not</strong> an official NPCI product and is not affiliated with or endorsed by NPCI, Paytm, Google Pay, or any UPI app. Simulated money only — no real UPI, bank, or payment systems are involved.</p>
     <p style="margin-block-start:12px"><button class="btn btn-ghost btn-sm" onclick="resetDemo()">Reset demo data</button></p>
   </footer>
 </div>
@@ -408,9 +357,7 @@ footer.site p{max-inline-size:56ch;margin:0 auto 8px}
   <a href="#/home" data-route="home"><span class="ic" aria-hidden="true">🏠</span>Home</a>
   <a href="#/create" data-route="create"><span class="ic" aria-hidden="true">✨</span>Create</a>
   <a href="#/redeem" data-route="redeem"><span class="ic" aria-hidden="true">💸</span>Redeem</a>
-  <a href="#/gifts" data-route="gifts"><span class="ic" aria-hidden="true">📋</span>My Gifts</a>
-  <a href="#/creator" data-route="creator"><span class="ic" aria-hidden="true">🎥</span>Creator</a>
-  <a href="#/how" data-route="how"><span class="ic" aria-hidden="true">❓</span>How</a>
+  <a href="#/codes" data-route="codes"><span class="ic" aria-hidden="true">📋</span>My Codes</a>
 </nav>
 
 <div id="toasts" role="status" aria-live="polite"></div>
@@ -419,10 +366,11 @@ footer.site p{max-inline-size:56ch;margin:0 auto 8px}
 
 <script>
 /* =================================================================
-   UPI Gift — Mobile Concept Prototype. All state local & simulated.
+   UPI Air — Mobile Concept Prototype. All state local & simulated.
+   Random codes: 16-char alphanumeric, no special characters.
    ================================================================= */
 "use strict";
-const LS_KEY = "upigift.prototype.v1";
+const LS_KEY = "upiair.prototype.v1";
 const $ = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
@@ -442,18 +390,24 @@ function maskUpi(u){
   const [id, bank="upi"] = u.split("@");
   return (id.slice(0,2) || "**") + "****@" + bank;
 }
-function uid(){ return "g_" + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
-function txRef(){ return "UG" + Date.now().toString(36).toUpperCase() + Math.floor(1000+Math.random()*9000); }
+function uid(){ return "a_" + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+function txRef(){ return "UA" + Date.now().toString(36).toUpperCase() + Math.floor(1000+Math.random()*9000); }
+
+/* 16-char alphanumeric code — unambiguous set (no 0/O, 1/I/L), no special chars */
 function genCode(len=16){
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789@#$%&*";
+  const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
   const buf = new Uint32Array(len); crypto.getRandomValues(buf);
   let s=""; for(let i=0;i<len;i++) s += chars[buf[i]%chars.length];
   return s;
 }
-function uniqueCode(len=16){ let c; do { c = genCode(len); } while (state.gifts.some(g=>g.code===c)); return c; }
+function uniqueCode(len=16){ let c; do { c = genCode(len); } while (state.codes.some(g=>g.code===c)); return c; }
+/* display long codes in groups of 4 */
+const fmtCode = c => c.length > 8 ? c.replace(/(.{4})/g,"$1 ").trim() : c;
+const normalize = c => String(c||"").replace(/\s+/g,"").trim().toLowerCase();
+const findByCode = code => state.codes.find(g=>normalize(g.code)===normalize(code));
 function fakeUpi(){
-  const names=["arjun","priya","vikram","sneha","rahul","ananya","kiran","meera","rohan","divya","aditya","lakshmi","nikhil","pooja","sai"];
-  const banks=["okhdfc","okicici","ybl","paytm","oksbi","okaxis","upi"];
+  const names=["arjun","priya","vikram","sneha","rahul","ananya","kiran","meera","rohan","divya"];
+  const banks=["okhdfc","okicici","ybl","paytm","oksbi","okaxis"];
   return names[Math.floor(Math.random()*names.length)] + Math.floor(Math.random()*99) + "@" + banks[Math.floor(Math.random()*banks.length)];
 }
 const UPI_RE = /^[a-zA-Z0-9._-]{2,}@[a-zA-Z]{2,}$/;
@@ -466,51 +420,32 @@ function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
 function load(){ try { const s = JSON.parse(localStorage.getItem(LS_KEY)); if (s && s.v===1) return s; } catch(e){} return null; }
 function uniqueCodeSeed(existing){ let c; do { c = genCode(16); } while (existing.some(g=>g.code===c)); return c; }
 function seed(){
-  const now = Date.now(), gifts = [];
-  const campId = "camp_dlc12";
-  for (let i=0;i<100;i++){
-    const created = now - 2*864e5 + i*9e5;
-    const redeemed = i < 73;
-    gifts.push({
-      id: uid()+i, code: uniqueCodeSeed(gifts), pin: null, amount: 500, kind: "random",
-      status: redeemed ? "REDEEMED" : "ACTIVE",
-      createdAt: created, expiresAt: null,
-      redeemedAt: redeemed ? created + Math.floor(Math.random()*40+2)*36e5 : null,
-      redeemedBy: redeemed ? fakeUpi() : null,
-      txRef: redeemed ? txRef() : null,
-      campaignId: campId, src: "seed"
-    });
-  }
-  gifts.push(
+  const now = Date.now();
+  const codes = [
     {id:uid(), code:"MANOJ500", pin:"54321", amount:500, kind:"custom", status:"ACTIVE",
-     createdAt: now-36e5*5, expiresAt: now+7*864e5, redeemedAt:null, redeemedBy:null, txRef:null, campaignId:null, src:"seed"},
-    {id:uid(), code:uniqueCodeSeed(gifts), pin:null, amount:250, kind:"random", status:"REDEEMED",
-     createdAt: now-2*864e5, expiresAt: now+5*864e5, redeemedAt: now-864e5, redeemedBy: fakeUpi(), txRef: txRef(), campaignId:null, src:"seed"},
-    {id:uid(), code:uniqueCodeSeed(gifts), pin:null, amount:100, kind:"random", status:"EXPIRED",
-     createdAt: now-4*864e5, expiresAt: now-864e5, redeemedAt:null, redeemedBy:null, txRef:null, campaignId:null, src:"seed"},
+     createdAt: now-36e5*5, expiresAt: now+7*864e5, redeemedAt:null, redeemedBy:null, txRef:null, src:"seed"},
+    {id:uid(), code:uniqueCodeSeed([]), pin:null, amount:250, kind:"random", status:"REDEEMED",
+     createdAt: now-2*864e5, expiresAt: now+5*864e5, redeemedAt: now-864e5, redeemedBy: fakeUpi(), txRef: txRef(), src:"seed"},
+    {id:uid(), code:uniqueCodeSeed([]), pin:null, amount:100, kind:"random", status:"EXPIRED",
+     createdAt: now-4*864e5, expiresAt: now-864e5, redeemedAt:null, redeemedBy:null, txRef:null, src:"seed"},
     {id:uid(), code:"DIWALI2026", pin:"11111", amount:1000, kind:"custom", status:"CANCELLED",
-     createdAt: now-6*864e5, expiresAt: null, redeemedAt:null, redeemedBy:null, txRef:null, campaignId:null, src:"seed"}
-  );
-  return {
-    v:1, balance: 10000, gifts,
-    campaigns: [{id:campId, name:"Don’t Laugh Challenge #12", budget:50000, per:500, count:100, createdAt: now-2*864e5, src:"seed"}]
-  };
+     createdAt: now-6*864e5, expiresAt: null, redeemedAt:null, redeemedBy:null, txRef:null, src:"seed"}
+  ];
+  return { v:1, balance: 10000, codes };
 }
 function sweep(){
   let changed=false, refunded=0;
-  for (const g of state.gifts){
+  for (const g of state.codes){
     if (g.status==="ACTIVE" && g.expiresAt && g.expiresAt < Date.now()){
       g.status="EXPIRED"; changed=true;
       if (g.src==="user") refunded += g.amount;
     }
   }
-  if (refunded>0){ state.balance += refunded; toast(inr(refunded)+" from expired gifts returned to your demo balance","success"); }
+  if (refunded>0){ state.balance += refunded; toast(inr(refunded)+" from expired codes returned to your demo balance","success"); }
   if (changed) save();
 }
-const activeGiftTotal = () => state.gifts.filter(g=>g.status==="ACTIVE" && g.src==="user").reduce((s,g)=>s+g.amount,0);
-const personalGifts = () => state.gifts.filter(g=>!g.campaignId).sort((a,b)=>b.createdAt-a.createdAt);
-const campGifts = id => state.gifts.filter(g=>g.campaignId===id);
-const findByCode = code => state.gifts.find(g=>g.code.toLowerCase()===String(code||"").trim().toLowerCase());
+const activeCodeTotal = () => state.codes.filter(g=>g.status==="ACTIVE" && g.src==="user").reduce((s,g)=>s+g.amount,0);
+const allCodes = () => [...state.codes].sort((a,b)=>b.createdAt-a.createdAt);
 
 /* ---------- toast / bottom sheet ---------- */
 function toast(msg, type=""){
@@ -526,7 +461,7 @@ function openSheet(html){
 function closeSheet(){ $("#sheetRoot").innerHTML=""; }
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeSheet(); });
 
-/* ---------- clipboard / share / download ---------- */
+/* ---------- clipboard / share ---------- */
 async function copyText(t, label="Code copied to clipboard"){
   try { await navigator.clipboard.writeText(t); }
   catch(e){
@@ -535,21 +470,11 @@ async function copyText(t, label="Code copied to clipboard"){
   }
   toast(label,"success");
 }
-function shareGift(id){
-  const g = state.gifts.find(x=>x.id===id); if(!g) return;
-  const text = `🎁 You’ve received a UPI Gift of ${inr(g.amount)}!\nCode: ${g.code}${g.pin?`\nPIN: ${g.pin}`:""}\nRedeem it in the UPI Gift concept prototype (simulated money).`;
-  if (navigator.share){ navigator.share({title:"UPI Gift (concept)", text}).catch(()=>{}); }
-  else copyText(text, "Gift details copied — paste anywhere to share");
-}
-function downloadCSV(campId){
-  const c = state.campaigns.find(x=>x.id===campId); if(!c) return;
-  const rows = [["code","amount_inr","status","pin"], ...campGifts(campId).map(g=>[g.code,g.amount,g.status,g.pin||""])];
-  const blob = new Blob([rows.map(r=>r.join(",")).join("\n")],{type:"text/csv"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = c.name.replace(/[^a-z0-9]+/gi,"-").toLowerCase() + "-codes.csv";
-  a.click(); URL.revokeObjectURL(a.href);
-  toast("CSV downloaded","success");
+function shareCode(id){
+  const g = state.codes.find(x=>x.id===id); if(!g) return;
+  const text = `💨 You’ve received a UPI Air code worth ${inr(g.amount)}!\nCode: ${g.code}${g.pin?`\nPIN: ${g.pin}`:""}\nRedeem it in the UPI Air concept prototype (simulated money).`;
+  if (navigator.share){ navigator.share({title:"UPI Air (concept)", text}).catch(()=>{}); }
+  else copyText(text, "Details copied — paste anywhere to share");
 }
 
 /* ---------- confetti ---------- */
@@ -557,7 +482,7 @@ function confetti(){
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const cv = $("#confetti"), ctx = cv.getContext("2d");
   cv.width = innerWidth; cv.height = innerHeight;
-  const colors = ["#5A3DF0","#9A7BFF","#0C8A5F","#FFB020","#E0245E","#101014"];
+  const colors = ["#2563EB","#38BDF8","#0C8A5F","#FFB020","#E0245E","#0E0F14"];
   const parts = Array.from({length:130},()=>({
     x: innerWidth/2 + (Math.random()-.5)*200, y: innerHeight*0.32,
     vx:(Math.random()-.5)*10, vy:-(Math.random()*11+4),
@@ -576,41 +501,21 @@ function confetti(){
   })();
 }
 
-/* ---------- QR (deterministic visual mock) ---------- */
-function showQR(id){
-  const g = state.gifts.find(x=>x.id===id); if(!g) return;
-  openSheet(`<h2>Gift QR</h2>
-    <p class="hint">Scan-to-redeem is a future-vision idea — this is a <strong>visual mock</strong>, not a scannable code.</p>
-    <div style="display:grid;place-items:center;margin-block:16px"><canvas id="qrCanvas" width="216" height="216" style="border-radius:14px;border:1px solid var(--color-border)"></canvas></div>
-    <p class="mono" style="text-align:center;font-weight:700;font-size:13px">${g.code}</p>
-    <div class="actions"><button class="btn btn-dark btn-block" onclick="closeSheet()">Done</button></div>`);
-  const cv = $("#qrCanvas"), ctx = cv.getContext("2d"), N=27, m=216/N;
-  let h = 2166136261; for (const ch of g.code){ h ^= ch.charCodeAt(0); h = Math.imul(h,16777619); }
-  const rnd = () => { h ^= h<<13; h ^= h>>>17; h ^= h<<5; return ((h>>>0)/4294967296); };
-  ctx.fillStyle="#fff"; ctx.fillRect(0,0,216,216); ctx.fillStyle="#101014";
-  const finder=(x,y)=>{ ctx.fillRect(x*m,y*m,7*m,7*m); ctx.fillStyle="#fff"; ctx.fillRect((x+1)*m,(y+1)*m,5*m,5*m); ctx.fillStyle="#101014"; ctx.fillRect((x+2)*m,(y+2)*m,3*m,3*m); };
-  for(let y=0;y<N;y++) for(let x=0;x<N;x++){
-    const inF=(x<8&&y<8)||(x>N-9&&y<8)||(x<8&&y>N-9);
-    if(!inF && rnd()>.52) ctx.fillRect(x*m+.5,y*m+.5,m-1,m-1);
-  }
-  finder(0,0); finder(N-7,0); finder(0,N-7);
-}
-
 /* =================================================================
    ACTIONS
    ================================================================= */
-function createGift(){
+function createCode(){
   const p = ps.create;
   const amt = p.amountChip==="custom" ? Math.floor(Number(p.customAmount)) : p.amountChip;
   const err = $("#createError");
-  const fail = msg => { err.innerHTML = `<div class="error-box" role="alert"><span class="ic" aria-hidden="true">⚠️</span><div><strong>Can’t create this gift</strong><p>${msg}</p></div></div>`; err.scrollIntoView({block:"center",behavior:"smooth"}); };
+  const fail = msg => { err.innerHTML = `<div class="error-box" role="alert"><span class="ic" aria-hidden="true">⚠️</span><div><strong>Can’t create this code</strong><p>${msg}</p></div></div>`; err.scrollIntoView({block:"center",behavior:"smooth"}); };
   if (!amt || amt < 1) return fail("Enter an amount of at least ₹1.");
-  if (amt > 100000) return fail("Keep a single gift under ₹1,00,000 for this demo.");
-  if (amt > state.balance) return fail(`Your demo balance is ${inr(state.balance)} — top up by redeeming a gift (try code <b>MANOJ500</b>, PIN <b>54321</b>).`);
+  if (amt > 100000) return fail("Keep a single code under ₹1,00,000 for this demo.");
+  if (amt > state.balance) return fail(`Your demo balance is ${inr(state.balance)} — top up by redeeming a code (try <b>MANOJ500</b>, PIN <b>54321</b>).`);
   let code=null, pin=null;
   if (p.kind==="custom"){
     code = (p.customCode||"").trim().toUpperCase();
-    if (!/^[A-Z0-9]{3,12}$/.test(code)) return fail("Custom codes need 3–12 letters or numbers (A–Z, 0–9).");
+    if (!/^[A-Z0-9]{3,12}$/.test(code)) return fail("Custom codes need 3–12 letters or numbers (A–Z, 0–9) — no special characters.");
     if (findByCode(code)) return fail("That code is already taken — try a different one.");
     if (!/^\d{5}$/.test(p.pin)) return fail("The PIN must be exactly 5 digits.");
     pin = p.pin;
@@ -619,54 +524,62 @@ function createGift(){
   if (!hours || hours < 1 || hours > 8760) return fail("Expiry must be between 1 hour and 1 year.");
   const g = { id: uid(), code, pin, amount: amt, kind: p.kind, status:"ACTIVE",
     createdAt: Date.now(), expiresAt: Date.now()+hours*36e5,
-    redeemedAt:null, redeemedBy:null, txRef:null, campaignId:null, src:"user" };
+    redeemedAt:null, redeemedBy:null, txRef:null, src:"user" };
   state.balance -= amt;
-  state.gifts.push(g); save();
+  state.codes.push(g); save();
   p.result = g.id; render();
-  toast(`${inr(amt)} locked into a new gift`,"success");
+  toast(`${inr(amt)} locked into a new code`,"success");
 }
-function cancelGift(id){
-  const g = state.gifts.find(x=>x.id===id);
+function cancelCode(id){
+  const g = state.codes.find(x=>x.id===id);
   if (!g || g.status!=="ACTIVE") return;
-  openSheet(`<h2>Cancel this gift?</h2>
+  openSheet(`<h2>Cancel this code?</h2>
     <p class="hint" style="margin-block:8px">The code <span class="mono"><b>${g.code}</b></span> will stop working immediately, and ${inr(g.amount)} returns to your demo balance.</p>
     <div class="actions">
-      <button class="btn btn-danger-soft btn-block" onclick="doCancelGift('${g.id}')">Cancel gift</button>
-      <button class="btn btn-ghost btn-block" onclick="closeSheet()">Keep gift</button>
+      <button class="btn btn-danger-soft btn-block" onclick="doCancelCode('${g.id}')">Cancel code</button>
+      <button class="btn btn-ghost btn-block" onclick="closeSheet()">Keep code</button>
     </div>`);
 }
-function doCancelGift(id){
-  const g = state.gifts.find(x=>x.id===id); if(!g || g.status!=="ACTIVE") return;
+function doCancelCode(id){
+  const g = state.codes.find(x=>x.id===id); if(!g || g.status!=="ACTIVE") return;
   g.status="CANCELLED";
   if (g.src==="user") state.balance += g.amount;
   save(); closeSheet(); render();
-  toast(`Gift cancelled — ${inr(g.amount)} returned to demo balance`,"success");
+  toast(`Code cancelled — ${inr(g.amount)} returned to demo balance`,"success");
 }
 
 /* Redemption with simulated race-condition protection */
 const redeemLocks = new Set();
+function statusError(g){
+  if (g.status==="CANCELLED") return {t:"Code was cancelled", d:"The sender cancelled this code, so it no longer works."};
+  if (g.status==="EXPIRED")   return {t:"Code expired", d:`This code expired on ${fmtDT(g.expiresAt)}. Expired codes can’t be redeemed.`};
+  if (g.status==="REDEEMED")  return {t:"Already redeemed", d:`This code was claimed on ${fmtDT(g.redeemedAt)} by ${maskUpi(g.redeemedBy)}. Each code can be claimed only once.`};
+  return null;
+}
 function redeemFind(){
-  const code = $("#redeemCode").value;
-  const g = findByCode(code);
+  const raw = $("#redeemCode").value;
+  const g = findByCode(raw);
   ps.redeem.err = null; ps.redeem.gift = null;
-  if (!code.trim()){ ps.redeem.err = {t:"Enter a gift code", d:"Paste or type the code exactly as it was shared with you."}; }
-  else if (!g){ ps.redeem.err = {t:"Gift not found", d:"We couldn’t find a gift with this code. Check for typos — one wrong character and it won’t match."}; }
-  else if (g.status==="CANCELLED"){ ps.redeem.err = {t:"Gift was cancelled", d:"The creator cancelled this gift, so the code no longer works."}; }
-  else if (g.status==="EXPIRED"){ ps.redeem.err = {t:"Gift expired", d:`This gift expired on ${fmtDT(g.expiresAt)}. Expired gifts can’t be redeemed.`}; }
-  else if (g.status==="REDEEMED"){ ps.redeem.err = {t:"Already redeemed", d:`This gift was claimed on ${fmtDT(g.redeemedAt)} by ${maskUpi(g.redeemedBy)}. Each gift can be claimed only once.`}; }
-  else { ps.redeem.gift = g.id; ps.redeem.step = g.pin ? "pin" : "confirm"; }
+  if (!raw.trim()){ ps.redeem.err = {t:"Enter a code", d:"Paste or type the code exactly as it was shared with you — letters and numbers only."}; }
+  else if (!/^[a-zA-Z0-9\s]+$/.test(raw.trim())){ ps.redeem.err = {t:"Invalid characters", d:"UPI Air codes are alphanumeric — no special characters like @, # or %."}; }
+  else if (!g){ ps.redeem.err = {t:"Code not found", d:"We couldn’t find a code with this value. Check for typos — one wrong character and it won’t match."}; }
+  else {
+    const se = statusError(g);
+    if (se) ps.redeem.err = se;
+    else { ps.redeem.gift = g.id; ps.redeem.step = g.pin ? "pin" : "confirm"; }
+  }
   render();
 }
 function redeemPin(){
-  const g = state.gifts.find(x=>x.id===ps.redeem.gift); if(!g) return;
+  const g = state.codes.find(x=>x.id===ps.redeem.gift); if(!g) return;
   const pin = $("#redeemPin").value.trim();
   ps.redeem.err = null;
-  if (pin !== g.pin){ ps.redeem.err = {t:"Incorrect PIN", d:"The gift stays locked. Double-check the 5-digit PIN with whoever shared the code."}; }
+  if (pin !== g.pin){ ps.redeem.err = {t:"Incorrect PIN", d:"The code stays locked. Double-check the 5-digit PIN with whoever shared it."}; }
   else ps.redeem.step = "confirm";
   render();
 }
 function redeemSubmit(){
-  const g = state.gifts.find(x=>x.id===ps.redeem.gift); if(!g) return;
+  const g = state.codes.find(x=>x.id===ps.redeem.gift); if(!g) return;
   const upi = $("#redeemUpi").value.trim().toLowerCase();
   ps.redeem.err = null;
   if (!UPI_RE.test(upi)){
@@ -674,17 +587,17 @@ function redeemSubmit(){
     return render();
   }
   if (redeemLocks.has(g.id)){
-    ps.redeem.err = {t:"Redemption already in progress", d:"Someone (maybe you, in another tab) is claiming this gift right now. Only the first completed claim wins."};
+    ps.redeem.err = {t:"Redemption already in progress", d:"Someone (maybe you, in another tab) is claiming this code right now. Only the first completed claim wins."};
     return render();
   }
   redeemLocks.add(g.id);
   ps.redeem.busy = true; render();
   setTimeout(()=>{
-    const fresh = state.gifts.find(x=>x.id===g.id);
+    const fresh = state.codes.find(x=>x.id===g.id);
     redeemLocks.delete(g.id);
     ps.redeem.busy = false;
     if (!fresh || fresh.status!=="ACTIVE"){
-      ps.redeem.err = {t:"Just missed it", d:"This gift was redeemed by someone else while your request was being verified. First completed claim wins."};
+      ps.redeem.err = {t:"Just missed it", d:"This code was redeemed by someone else while your request was being verified. First completed claim wins."};
       return render();
     }
     fresh.status="REDEEMED"; fresh.redeemedAt=Date.now(); fresh.redeemedBy=upi; fresh.txRef=txRef();
@@ -693,63 +606,6 @@ function redeemSubmit(){
     render(); confetti();
   }, 900);
 }
-
-/* Creator */
-function createCampaign(){
-  const name = $("#campName").value.trim() || "Untitled giveaway";
-  const budget = Math.floor(Number($("#campBudget").value));
-  const count = Math.floor(Number($("#campCount").value));
-  const err = $("#campError");
-  const fail = m => { err.innerHTML = `<div class="error-box" role="alert"><span class="ic" aria-hidden="true">⚠️</span><div><strong>Can’t create campaign</strong><p>${m}</p></div></div>`; err.scrollIntoView({block:"center",behavior:"smooth"}); };
-  if (!budget || budget<1) return fail("Enter a total budget of at least ₹1.");
-  if (!count || count<1) return fail("Enter at least 1 winner.");
-  if (count>200) return fail("Cap is 200 codes per campaign in this prototype.");
-  const per = Math.floor(budget/count);
-  if (per<1) return fail("Budget per winner would be under ₹1 — raise the budget or lower the winner count.");
-  const total = per*count;
-  if (total > state.balance) return fail(`This campaign locks ${inr(total)} but your demo balance is ${inr(state.balance)}.`);
-  const c = { id: uid(), name, budget: total, per, count, createdAt: Date.now(), src:"user" };
-  state.balance -= total;
-  for (let i=0;i<count;i++){
-    state.gifts.push({ id: uid()+i, code: uniqueCode(16), pin:null, amount:per, kind:"random",
-      status:"ACTIVE", createdAt: Date.now(), expiresAt: Date.now()+30*864e5,
-      redeemedAt:null, redeemedBy:null, txRef:null, campaignId:c.id, src:"user" });
-  }
-  state.campaigns.push(c); save();
-  toast(`Campaign created — ${count} codes generated, ${inr(total)} locked`,"success");
-  render();
-}
-function viewCodes(campId){
-  const c = state.campaigns.find(x=>x.id===campId); if(!c) return;
-  const gs = campGifts(campId);
-  const rows = gs.map(g=>`<div class="row"><span class="mono">${g.code}</span><span class="pill ${g.status.toLowerCase()}">${statusIcon(g.status)} ${g.status}</span></div>`).join("");
-  openSheet(`<h2>${esc(c.name)}</h2>
-    <p class="hint">${gs.length} codes · ${inr(c.per)} each. Publish them in a video, stream or community post — first successful redemption wins each one.</p>
-    <div class="code-list">${rows}</div>
-    <div class="actions">
-      <button class="btn btn-primary btn-block" onclick="copyText(campGifts('${campId}').map(g=>g.code).join('\\n'),'All codes copied')">Copy all codes</button>
-      <button class="btn btn-ghost btn-block" onclick="downloadCSV('${campId}')">Download CSV</button>
-      <button class="btn btn-ghost btn-block" onclick="closeSheet()">Close</button>
-    </div>`);
-}
-function goLive(campId){
-  const next = campGifts(campId).find(g=>g.status==="ACTIVE");
-  ps.creator.live = { campId, giftId: next ? next.id : null };
-  render();
-}
-function liveNext(){
-  const L = ps.creator.live; if(!L) return;
-  const next = campGifts(L.campId).find(g=>g.status==="ACTIVE" && g.id!==L.giftId);
-  L.giftId = next ? next.id : null; render();
-}
-function liveSimulate(){
-  const L = ps.creator.live; if(!L || !L.giftId) return;
-  const g = state.gifts.find(x=>x.id===L.giftId);
-  if (!g || g.status!=="ACTIVE") return;
-  g.status="REDEEMED"; g.redeemedAt=Date.now(); g.redeemedBy=fakeUpi(); g.txRef=txRef();
-  save(); render(); toast("Simulated audience claim","success");
-}
-function endLive(){ ps.creator.live=null; render(); }
 
 function resetDemo(){
   localStorage.removeItem(LS_KEY);
@@ -766,32 +622,31 @@ function resetPageState(){
   ps = {
     create: { amountChip:500, customAmount:"", kind:"random", customCode:"", pin:"", expiryChip:168, customHours:"", result:null },
     redeem: { step:"code", gift:null, err:null, busy:false, done:null, prefill:null },
-    gifts:  { tab:"created" },
-    creator:{ live:null }
+    codes:  { tab:"created" }
   };
 }
 resetPageState();
 
 const protoTag = () => `<span class="proto-tag">⚠️ Concept Prototype – Simulated Money. Not connected to real UPI transactions.</span>`;
 
-function giftCardHTML(g, {reveal=false, actions=true}={}){
-  const pinRow = g.pin ? `<div class="gc-pin">PIN&nbsp;&nbsp;<b>${g.pin}</b></div>` : "";
-  const kindLbl = g.campaignId ? "Campaign code" : (g.kind==="custom" ? "Custom code + PIN" : "Random high-entropy code");
+function airCardHTML(g, {reveal=false, actions=true}={}){
+  const pinRow = g.pin ? `<div class="ac-pin">PIN&nbsp;&nbsp;<b>${g.pin}</b></div>` : "";
+  const kindLbl = g.kind==="custom" ? "Custom code + PIN" : "16-char alphanumeric code";
   const expiry = g.expiresAt ? (g.status==="ACTIVE" ? `Expires in ${timeLeft(g.expiresAt)}` : `Expired ${fmtD(g.expiresAt)}`) : "No expiry";
-  return `<div class="giftcard ${reveal?"reveal":""}">
-    <div class="gc-top">
-      <div><div class="gc-amt-lbl">UPI Gift · Concept</div><div class="gc-amt">${inr(g.amount)}</div></div>
+  return `<div class="aircard ${reveal?"reveal":""}">
+    <div class="ac-top">
+      <div><div class="ac-amt-lbl">UPI Air · Concept</div><div class="ac-amt">${inr(g.amount)}</div></div>
       <span class="pill ${g.status.toLowerCase()}">${statusIcon(g.status)} ${g.status}</span>
     </div>
-    <div class="gc-code">${g.code}</div>
+    <div class="ac-code">${fmtCode(g.code)}</div>
     ${pinRow}
-    <div class="gc-meta"><span>${kindLbl}</span><span>${expiry}</span><span>Single redemption</span></div>
+    <div class="ac-meta"><span>${kindLbl}</span><span>${expiry}</span><span>Single redemption</span></div>
   </div>
-  ${actions ? `<div class="gc-actions">
+  ${actions ? `<div class="ac-actions">
     <button class="btn btn-dark btn-sm" onclick="copyText('${g.code}')">Copy code</button>
-    <button class="btn btn-ghost btn-sm" onclick="shareGift('${g.id}')">Share</button>
-    <button class="btn btn-ghost btn-sm" onclick="showQR('${g.id}')">Show QR</button>
-    ${g.status==="ACTIVE" ? `<button class="btn btn-danger-soft btn-sm" onclick="cancelGift('${g.id}')">Cancel gift</button>` : `<span></span>`}
+    <button class="btn btn-ghost btn-sm" onclick="shareCode('${g.id}')">Share</button>
+    ${g.status==="ACTIVE" ? `<button class="btn btn-danger-soft btn-sm" onclick="cancelCode('${g.id}')">Cancel code</button>` : `<a class="btn btn-ghost btn-sm" href="#/redeem?code=${encodeURIComponent(g.code)}">Redeem view</a>`}
+    <button class="btn btn-ghost btn-sm" onclick="copyText('${g.code}${g.pin?` | PIN: ${g.pin}`:""}','Code${g.pin?" + PIN":""} copied')">Copy all</button>
   </div>` : ""}`;
 }
 
@@ -800,30 +655,25 @@ function viewHome(){
   return `
   <section class="hero">
     <div class="anim-rise">${protoTag()}</div>
-    <h1 class="anim-rise d1" style="margin-block-start:20px">Money, as a <span class="accent">code</span>.</h1>
-    <p class="sub anim-rise d2">Send money without knowing who will receive it. Create a secure digital claim, share the code, and let the right person redeem it — into any eligible UPI ID.</p>
+    <h1 class="anim-rise d1" style="margin-block-start:20px">Send money into the <span class="accent">air</span>.</h1>
+    <p class="sub anim-rise d2">UPI Air turns money into a code. Share it anywhere — the right person redeems it into any eligible UPI ID. You never need to know who.</p>
     <div class="cta anim-rise d3">
-      <a class="btn btn-primary btn-block" href="#/create">Create a gift</a>
-      <a class="btn btn-ghost btn-block" href="#/how">See how it works</a>
-    </div>
-    <div class="mantra">
-      <div class="m anim-rise d2">“Send money without knowing who will receive it.”<small>The recipient is decided at claim time, not at creation time.</small></div>
-      <div class="m anim-rise d3">“Create a secure digital claim. Share the code. Let the right person redeem it.”<small>A code + optional PIN is all anyone needs.</small></div>
-      <div class="m anim-rise d4">“Give money to whoever claims it first.”<small>The creator version — giveaways with zero data collection.</small></div>
+      <a class="btn btn-primary btn-block" href="#/create">Create a code</a>
+      <a class="btn btn-ghost btn-block" href="#/redeem">Redeem a code</a>
     </div>
   </section>
 
   <section class="section">
     <div class="card pad-lg story anim-rise">
-      <span class="pill neutral">The family emergency</span>
+      <span class="pill neutral">Why it exists</span>
       <h2 style="margin-block:12px">Manoj needs ₹500. His father is 400&nbsp;km away.</h2>
-      <p>Manoj runs out of cash while travelling at night. His father can’t send money to a stranger — he doesn’t know who will help his son. So he creates a <strong>₹500 UPI Gift</strong> with a custom code and PIN, and sends both to Manoj on WhatsApp.</p>
+      <p>Manoj runs out of cash while travelling at night. His father can’t send money to a stranger — he doesn’t know who will help his son. So he creates a <strong>₹500 UPI Air code</strong> with a 5-digit lock and sends it on WhatsApp.</p>
       <div class="chat-meta">WhatsApp · Dad</div>
-      <div class="chat-bubble">Beta, giving this code to any trusted person will get you ₹500:<br><span class="mono"><b>MANOJ500</b></span><br>PIN: <span class="mono"><b>54321</b></span></div>
+      <div class="chat-bubble">Beta, this UPI Air code will get you ₹500 from any trusted person:<br><span class="mono"><b>MANOJ500</b></span><br>PIN: <span class="mono"><b>54321</b></span></div>
       <div class="mini-flow">
-        <div class="mf"><span class="n">1</span><p>Father creates the gift — ₹500 is locked, not sent to anyone yet.</p></div>
-        <div class="mf"><span class="n">2</span><p>Manoj gives the code + PIN to a trusted shopkeeper near the bus stand.</p></div>
-        <div class="mf"><span class="n">3</span><p>The shopkeeper redeems it into <em>his own</em> UPI ID and hands Manoj ₹500 cash. Crisis over.</p></div>
+        <div class="mf"><span class="n">1</span><p>Father creates the code — ₹500 is locked, not sent to anyone yet.</p></div>
+        <div class="mf"><span class="n">2</span><p>Manoj gives the code + PIN to a trusted shopkeeper.</p></div>
+        <div class="mf"><span class="n">3</span><p>The shopkeeper redeems it into <em>his own</em> UPI ID and hands Manoj ₹500 cash.</p></div>
       </div>
       <div style="margin-block-start:18px;display:grid;gap:8px">
         <a class="btn btn-primary btn-block" href="#/redeem?code=MANOJ500">Try it — redeem MANOJ500</a>
@@ -833,30 +683,20 @@ function viewHome(){
   </section>
 
   <section class="section">
-    <div class="card pad-lg anim-rise" style="background:var(--color-dark-solid);color:var(--color-dark-text);border:0">
-      <span class="pill live">🎥 For creators</span>
-      <h2 style="margin-block:12px;font-size:24px">Giveaways without collecting UPI&nbsp;IDs.</h2>
-      <p style="color:#B9B8C4;font-size:14.5px">Generate 1 or 100 high-entropy codes, fund them once, and paste them into your video or livestream. The first viewer to redeem each code wins — you never need their UPI ID, name, or phone number in advance.</p>
-      <div style="display:grid;gap:10px;margin-block-start:18px">
-        <a class="btn btn-primary btn-block" href="#/creator">Open creator mode</a>
-        <a class="btn btn-block" style="background:rgba(255,255,255,.12);color:var(--color-dark-text)" href="#/how">Compare with vouchers</a>
+    <div class="card pad-lg anim-rise">
+      <span class="pill neutral">A feature, not an app</span>
+      <h2 style="margin-block:12px;font-size:22px">One more tab in the UPI app people already use.</h2>
+      <p style="font-size:14px;color:var(--color-text-secondary)">Pay sends to someone you know. Request asks someone you know. Split divides among people you know. <strong style="color:var(--color-text-primary)">Air is the missing fourth verb — value for someone you don’t know yet.</strong> Unlike vouchers or e-RUPI, an Air code isn’t tied to a phone number or a purpose: anyone eligible who holds the code can claim it.</p>
+      <div class="phone" style="margin-block-start:18px" aria-hidden="true">
+        <div class="screen"><div style="font-family:var(--font-display);font-weight:800;font-size:16px">A UPI app near you</div><div style="font-size:12px;color:var(--color-text-secondary)">Concept navigation</div></div>
+        <div class="dock">
+          <div><span class="ic">💸</span>Pay</div>
+          <div><span class="ic">📥</span>Request</div>
+          <div><span class="ic">✂️</span>Split</div>
+          <div class="on"><span class="ic">💨</span>Air</div>
+        </div>
       </div>
     </div>
-  </section>
-
-  <section class="section">
-    <h2 style="font-size:22px;margin-block-end:12px;padding-inline:2px">Not a voucher. Not e-RUPI. A claim.</h2>
-    <div class="tbl-wrap anim-rise"><table>
-      <thead><tr><th></th><th>UPI Gift <span class="pill neutral">concept</span></th><th>UPI vouchers in apps</th><th>e-RUPI</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Recipient needed at creation</strong></td><td class="yes">No — anyone with the code</td><td class="no">Usually yes — mobile-linked</td><td class="no">Yes — issued to a mobile/QR</td></tr>
-        <tr><td><strong>Purpose</strong></td><td class="yes">General-purpose digital cash</td><td>Person-to-person gifting</td><td>Purpose-restricted (vaccines, subsidies)</td></tr>
-        <tr><td><strong>Redeems into</strong></td><td class="yes">Any eligible UPI ID at claim time</td><td>The linked recipient’s account</td><td>The specified beneficiary only</td></tr>
-        <tr><td><strong>Killer use case</strong></td><td>Creator giveaways, emergency cash, public gifts</td><td>Sending to known contacts</td><td>Targeted benefit delivery</td></tr>
-      </tbody>
-    </table></div>
-    <p class="swipe-hint">Swipe sideways to compare →</p>
-    <p class="hint" style="margin-block-start:8px;padding-inline:2px">Comparison simplified for the concept; real products vary by issuer and app.</p>
   </section>`;
 }
 
@@ -864,26 +704,26 @@ function viewHome(){
 function viewCreate(){
   const p = ps.create;
   if (p.result){
-    const g = state.gifts.find(x=>x.id===p.result);
+    const g = state.codes.find(x=>x.id===p.result);
     if (g) return `
-      <div class="page-head anim-rise"><h1>Gift created 🎉</h1>${protoTag()}</div>
-      ${giftCardHTML(g,{reveal:true})}
+      <div class="page-head anim-rise"><h1>Code created 🎉</h1>${protoTag()}</div>
+      ${airCardHTML(g,{reveal:true})}
       <div class="card" style="margin-block-start:14px">
         <p class="hint" style="text-align:center">${inr(g.amount)} was locked from your demo balance. Share the code${g.pin?" and PIN":""} — whoever redeems it first, into any demo UPI ID, gets the money. Expiry or cancel returns it to you.</p>
       </div>
       <div style="display:grid;gap:10px;margin-block-start:16px">
-        <button class="btn btn-primary btn-block" onclick="ps.create.result=null;ps.create.customCode='';ps.create.pin='';render()">Create another gift</button>
-        <a class="btn btn-ghost btn-block" href="#/gifts">View My Gifts</a>
+        <button class="btn btn-primary btn-block" onclick="ps.create.result=null;ps.create.customCode='';ps.create.pin='';render()">Create another code</button>
+        <a class="btn btn-ghost btn-block" href="#/codes">View My Codes</a>
       </div>`;
   }
   const amt = p.amountChip==="custom" ? Math.floor(Number(p.customAmount)||0) : p.amountChip;
   const chip = v => `<button class="chip ${p.amountChip===v?"selected":""}" onclick="setCreate('amountChip',${v})">${inr(v)}</button>`;
   const expChip = (v,l) => `<button class="chip ${p.expiryChip===v?"selected":""}" onclick="setCreate('expiryChip',${v})">${l}</button>`;
   return `
-  <div class="page-head anim-rise"><h1>Create a gift</h1>${protoTag()}</div>
+  <div class="page-head anim-rise"><h1>Create a code</h1>${protoTag()}</div>
   <div class="grid cols-2 anim-rise d1" style="margin-block-end:14px">
     <div class="stat"><div class="k">Demo balance</div><div class="v">${inr(state.balance)}</div></div>
-    <div class="stat"><div class="k">Locked in gifts</div><div class="v">${inr(activeGiftTotal())}</div></div>
+    <div class="stat"><div class="k">Locked in codes</div><div class="v">${inr(activeCodeTotal())}</div></div>
   </div>
   <div class="card pad-lg anim-rise d2">
     <div id="createError"></div>
@@ -897,19 +737,19 @@ function viewCreate(){
         <input class="input" id="customAmt" type="number" inputmode="numeric" min="1" max="100000" placeholder="e.g. 750" value="${p.customAmount}" oninput="setCreate('customAmount',this.value)">` : ""}
     </div>
     <div class="field">
-      <span class="label">Gift type</span>
-      <div class="seg" role="group" aria-label="Gift type">
+      <span class="label">Code type</span>
+      <div class="seg" role="group" aria-label="Code type">
         <button class="${p.kind==="random"?"selected":""}" onclick="setCreate('kind','random')">🎲 Random code</button>
         <button class="${p.kind==="custom"?"selected":""}" onclick="setCreate('kind','custom')">🔒 Custom + PIN</button>
       </div>
       <p class="hint">${p.kind==="random"
-        ? "A 16-character high-entropy code is generated for you — ideal for giveaways and strangers."
-        : "You pick a memorable code and a 5-digit PIN — ideal for family, shared over a call."}</p>
+        ? "A 16-character alphanumeric code is generated for you — letters and numbers only, nothing to misread."
+        : "You pick a memorable code and lock it with a 5-digit PIN — ideal for family, shared over a call."}</p>
     </div>
     ${p.kind==="custom" ? `
     <div class="field">
       <label class="label" for="cc">Custom code</label>
-      <input class="input mono" id="cc" maxlength="12" placeholder="MANOJ500" autocapitalize="characters" autocomplete="off" value="${esc(p.customCode)}" oninput="setCreate('customCode',this.value.toUpperCase())" style="text-transform:uppercase;letter-spacing:.08em">
+      <input class="input mono" id="cc" maxlength="12" placeholder="MANOJ500" autocapitalize="characters" autocomplete="off" spellcheck="false" value="${esc(p.customCode)}" oninput="setCreate('customCode',this.value.toUpperCase())" style="text-transform:uppercase;letter-spacing:.08em">
     </div>
     <div class="field">
       <label class="label" for="cp">5-digit PIN</label>
@@ -923,11 +763,11 @@ function viewCreate(){
       </div>
       ${p.expiryChip==="custom" ? `<label class="label" for="ch" style="margin-block-start:8px">Custom expiry (hours)</label>
         <input class="input" id="ch" type="number" inputmode="numeric" min="1" max="8760" placeholder="e.g. 72" value="${p.customHours}" oninput="setCreate('customHours',this.value)">` : ""}
-      <p class="hint">Unclaimed gifts return to your demo balance at expiry.</p>
+      <p class="hint">Unclaimed codes return to your demo balance at expiry.</p>
     </div>
   </div>
   <div class="sticky-cta">
-    <button class="btn btn-primary btn-block" onclick="createGift()">Create ${amt>0?inr(amt)+" ":""}gift</button>
+    <button class="btn btn-primary btn-block" onclick="createCode()">Create ${amt>0?inr(amt)+" ":""}code</button>
     <p class="hint" style="text-align:center;margin-block-start:8px">Locks ${inr(amt||0)} · single redemption · simulated money only</p>
   </div>`;
 }
@@ -942,20 +782,20 @@ function viewRedeem(){
     body = `
     <div class="card pad-lg anim-rise d1">
       <div class="field">
-        <label class="label" for="redeemCode">Gift code</label>
-        <input class="input code-input" id="redeemCode" placeholder="e.g. K7@pQ92Lm#X4zT8R9" value="${esc(r.prefill||"")}" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" onkeydown="if(event.key==='Enter')redeemFind()">
-        <p class="hint">Try the demo code <span class="mono"><b>MANOJ500</b></span> (PIN <span class="mono"><b>54321</b></span>) — or any code you created.</p>
+        <label class="label" for="redeemCode">UPI Air code</label>
+        <input class="input code-input" id="redeemCode" placeholder="K7PQ 92LM X4ZT 8R9J" value="${esc(r.prefill||"")}" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="go" onkeydown="if(event.key==='Enter')redeemFind()">
+        <p class="hint">16-character alphanumeric, or a custom code. Try <span class="mono"><b>MANOJ500</b></span> (PIN <span class="mono"><b>54321</b></span>).</p>
       </div>
       ${errBox}
     </div>
     <div class="sticky-cta">
-      <button class="btn btn-primary btn-block" onclick="redeemFind()">Find gift</button>
+      <button class="btn btn-primary btn-block" onclick="redeemFind()">Find code</button>
     </div>`;
   } else if (r.step==="pin"){
-    const g = state.gifts.find(x=>x.id===r.gift);
+    const g = state.codes.find(x=>x.id===r.gift);
     body = `
     <div class="card pad-lg anim-rise" style="text-align:center">
-      <span class="pill neutral">🔒 PIN-locked gift</span>
+      <span class="pill neutral">🔒 PIN-locked code</span>
       <h2 style="margin-block:14px;font-size:21px">Enter the 5-digit PIN</h2>
       <p class="hint" style="margin-block-end:16px">Code <span class="mono"><b>${g?esc(g.code):""}</b></span> is locked. The PIN would have been shared along with the code.</p>
       <div class="field" style="display:grid;justify-items:center">
@@ -969,13 +809,13 @@ function viewRedeem(){
       <button class="btn btn-ghost btn-block" style="margin-block-start:9px" onclick="ps.redeem.step='code';ps.redeem.err=null;render()">Back</button>
     </div>`;
   } else if (r.step==="confirm"){
-    const g = state.gifts.find(x=>x.id===r.gift);
+    const g = state.codes.find(x=>x.id===r.gift);
     if (!g){ r.step="code"; return viewRedeem(); }
     body = `
-    <div class="anim-rise">${giftCardHTML(g,{actions:false})}</div>
+    <div class="anim-rise">${airCardHTML(g,{actions:false})}</div>
     <div class="card pad-lg anim-rise d1" style="margin-block-start:14px">
       <h2 style="font-size:18px;margin-block-end:4px">Where should the money go?</h2>
-      <p class="hint" style="margin-block-end:14px">Enter any demo UPI ID — the gift redeems into <em>your</em> ID, whoever you are. That’s the whole point.</p>
+      <p class="hint" style="margin-block-end:14px">Enter any demo UPI ID — the code redeems into <em>your</em> ID, whoever you are. That’s the whole point.</p>
       <div class="field">
         <label class="label" for="redeemUpi">Your UPI ID (demo)</label>
         <input class="input mono" id="redeemUpi" type="text" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" placeholder="yourname@okhdfc" onkeydown="if(event.key==='Enter')redeemSubmit()">
@@ -984,7 +824,7 @@ function viewRedeem(){
     </div>
     <div class="sticky-cta">
       <button class="btn btn-primary btn-block" ${r.busy?"disabled":""} onclick="redeemSubmit()">
-        ${r.busy ? "Verifying gift…" : `Redeem ${inr(g.amount)}`}
+        ${r.busy ? "Verifying code…" : `Redeem ${inr(g.amount)}`}
       </button>
       <p class="hint" style="text-align:center;margin-block-start:8px">First completed claim wins — simulated race-condition protection is active.</p>
     </div>`;
@@ -996,25 +836,25 @@ function viewRedeem(){
       <h2 style="margin-block:16px 4px;font-size:26px">${inr(d.amount)} claimed!</h2>
       <p class="hint">Credited to <span class="mono"><b>${esc(d.upi)}</b></span> (demo balance)</p>
       <div class="card-inner" style="margin-block:16px;text-align:start;display:grid;gap:9px">
-        <div style="display:flex;justify-content:space-between;gap:10px"><span class="hint">Gift code</span><span class="mono" style="font-weight:700;font-size:12.5px">${esc(d.code)}</span></div>
+        <div style="display:flex;justify-content:space-between;gap:10px"><span class="hint">Code</span><span class="mono" style="font-weight:700;font-size:12.5px">${fmtCode(d.code)}</span></div>
         <div style="display:flex;justify-content:space-between;gap:10px"><span class="hint">Transaction ref</span><span class="mono num" style="font-size:12.5px">${d.ref}</span></div>
         <div style="display:flex;justify-content:space-between;gap:10px"><span class="hint">New demo balance</span><span class="num" style="font-weight:700">${inr(state.balance)}</span></div>
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span class="hint">Status</span><span class="pill redeemed">✓ REDEEMED</span></div>
       </div>
-      <p class="hint">🔒 This gift can no longer be redeemed. Each code works exactly once.</p>
+      <p class="hint">🔒 This code can no longer be redeemed. Each code works exactly once.</p>
       <div style="display:grid;gap:10px;margin-block-start:16px">
         <button class="btn btn-primary btn-block" onclick="ps.redeem={step:'code',gift:null,err:null,busy:false,done:null,prefill:null};render()">Redeem another</button>
-        <a class="btn btn-ghost btn-block" href="#/gifts">View My Gifts</a>
+        <a class="btn btn-ghost btn-block" href="#/codes">View My Codes</a>
       </div>
     </div>`;
   }
-  return `<div class="page-head anim-rise"><h1>Redeem UPI Gift</h1>${protoTag()}</div>${body}`;
+  return `<div class="page-head anim-rise"><h1>Redeem UPI Air</h1>${protoTag()}</div>${body}`;
 }
 
-/* ---------- MY GIFTS ---------- */
-function viewGifts(){
-  const t = ps.gifts.tab;
-  const all = personalGifts();
+/* ---------- MY CODES ---------- */
+function viewCodes(){
+  const t = ps.codes.tab;
+  const all = allCodes();
   const count = s => s==="created" ? all.length : all.filter(g=>g.status===s).length;
   const tabs = [["created","Created"],["ACTIVE","Active"],["REDEEMED","Redeemed"],["EXPIRED","Expired"],["CANCELLED","Cancelled"]];
   const list = t==="created" ? all : all.filter(g=>g.status===t);
@@ -1025,190 +865,31 @@ function viewGifts(){
         ? `Created ${fmtDT(g.createdAt)}${g.expiresAt?` · Expires in ${timeLeft(g.expiresAt)}`:" · No expiry"}`
         : g.status==="EXPIRED" ? `Expired ${fmtDT(g.expiresAt)}`
         : `Cancelled · Created ${fmtDT(g.createdAt)}`;
-    return `<div class="gift-row anim-rise">
+    return `<div class="code-row anim-rise">
       <div class="top"><span class="amt">${inr(g.amount)}</span><span class="pill ${g.status.toLowerCase()}">${statusIcon(g.status)} ${g.status}</span></div>
       <div>
-        <div class="code">${g.code}${g.pin?` <span class="hint">· PIN ${g.pin}</span>`:""}</div>
-        <div class="meta">${g.kind==="custom"?"Custom + PIN":"Random code"} · ${meta}</div>
+        <div class="code">${fmtCode(g.code)}${g.pin?` <span class="hint">· PIN ${g.pin}</span>`:""}</div>
+        <div class="meta">${g.kind==="custom"?"Custom + PIN":"Random 16-char"} · ${meta}</div>
       </div>
       <div class="actions">
         <button class="btn btn-ghost btn-sm" onclick="copyText('${g.code}')">Copy code</button>
-        ${g.status==="ACTIVE" ? `<button class="btn btn-danger-soft btn-sm" onclick="cancelGift('${g.id}')">Cancel gift</button>` : ""}
+        ${g.status==="ACTIVE" ? `<button class="btn btn-danger-soft btn-sm" onclick="cancelCode('${g.id}')">Cancel code</button>` : ""}
       </div>
     </div>`;
   }).join("");
   return `
-  <div class="page-head anim-rise"><h1>My Gifts</h1>${protoTag()}</div>
+  <div class="page-head anim-rise"><h1>My Codes</h1>${protoTag()}</div>
   <div class="tabs anim-rise d1" role="tablist">
-    ${tabs.map(([k,l])=>`<button role="tab" aria-selected="${t===k}" class="${t===k?"selected":""}" onclick="ps.gifts.tab='${k}';render()">${l}<span class="cnt">${count(k)}</span></button>`).join("")}
+    ${tabs.map(([k,l])=>`<button role="tab" aria-selected="${t===k}" class="${t===k?"selected":""}" onclick="ps.codes.tab='${k}';render()">${l}<span class="cnt">${count(k)}</span></button>`).join("")}
   </div>
   <div class="grid" style="gap:10px">
-    ${rows || `<div class="empty"><div class="big" aria-hidden="true">🎁</div><strong>Nothing here yet</strong>Create a gift and it will show up in this list.<div style="margin-block-start:14px"><a class="btn btn-primary btn-sm" href="#/create">Create a gift</a></div></div>`}
+    ${rows || `<div class="empty"><div class="big" aria-hidden="true">💨</div><strong>Nothing here yet</strong>Create a code and it will show up in this list.<div style="margin-block-start:14px"><a class="btn btn-primary btn-sm" href="#/create">Create a code</a></div></div>`}
   </div>`;
-}
-
-/* ---------- CREATOR ---------- */
-function viewCreator(){
-  const live = ps.creator.live;
-  if (live) return viewLive(live);
-  const camps = state.campaigns.map(c=>{
-    const gs = campGifts(c.id);
-    const done = gs.filter(g=>g.status==="REDEEMED").length;
-    const dist = gs.filter(g=>g.status==="REDEEMED").reduce((s,g)=>s+g.amount,0);
-    const pct = Math.round(done/gs.length*100);
-    return `<div class="card pad-lg anim-rise">
-      <div style="display:flex;gap:10px;align-items:flex-start;margin-block-end:14px">
-        <div style="flex:1">
-          <h2 style="font-size:18px">${esc(c.name)}</h2>
-          <p class="hint">Created ${fmtDT(c.createdAt)} · codes valid 30 days</p>
-        </div>
-        <span class="pill ${done===gs.length?"redeemed":"live"}">${done===gs.length?"✓ Done":"● Live"}</span>
-      </div>
-      <div class="grid cols-2" style="margin-block-end:14px">
-        <div class="stat"><div class="k">Total funded</div><div class="v">${inr(c.budget)}</div></div>
-        <div class="stat"><div class="k">Gifts</div><div class="v">${gs.length} × ${inr(c.per)}</div></div>
-        <div class="stat"><div class="k">Redeemed</div><div class="v">${done}<span style="color:var(--color-text-secondary);font-size:15px">/${gs.length}</span></div></div>
-        <div class="stat"><div class="k">Distributed</div><div class="v">${inr(dist)}</div></div>
-      </div>
-      <div class="progress" role="img" aria-label="${done} of ${gs.length} gifts redeemed"><i style="width:${pct}%"></i></div>
-      <p class="hint" style="margin-block:8px 14px">${done} claimed · ${gs.length-done} remaining · ${pct}% distributed</p>
-      <div style="display:grid;gap:9px">
-        <button class="btn btn-primary btn-block" onclick="goLive('${c.id}')" ${done===gs.length?"disabled":""}>Go live</button>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
-          <button class="btn btn-ghost" onclick="viewCodes('${c.id}')">View codes</button>
-          <button class="btn btn-ghost" onclick="downloadCSV('${c.id}')">Download CSV</button>
-        </div>
-      </div>
-    </div>`;
-  }).join("");
-  return `
-  <div class="page-head anim-rise"><h1>Creator mode</h1><p class="sub">“Give money to whoever claims it first.” Fund once, publish the codes, never collect anyone’s UPI ID.</p>${protoTag()}</div>
-  <div class="grid" style="gap:14px">${camps}</div>
-  <div class="card pad-lg section anim-rise">
-    <h2 style="font-size:19px;margin-block-end:14px">Create a campaign</h2>
-    <div id="campError"></div>
-    <div class="field"><label class="label" for="campName">Campaign name</label>
-      <input class="input" id="campName" placeholder="Don’t Laugh Challenge #13" autocomplete="off"></div>
-    <div class="field"><label class="label" for="campBudget">Total budget (₹)</label>
-      <input class="input" id="campBudget" type="number" inputmode="numeric" min="1" placeholder="50000"></div>
-    <div class="field"><label class="label" for="campCount">Number of winners</label>
-      <input class="input" id="campCount" type="number" inputmode="numeric" min="1" max="200" placeholder="100"></div>
-    <p class="hint" style="margin-block-end:6px">Budget is split evenly (₹ per winner = budget ÷ winners) and locked from your demo balance. Each winner gets one unique single-use code.</p>
-  </div>
-  <div class="sticky-cta">
-    <button class="btn btn-primary btn-block" onclick="createCampaign()">Create campaign &amp; generate codes</button>
-  </div>`;
-}
-
-function viewLive(L){
-  const c = state.campaigns.find(x=>x.id===L.campId);
-  if (!c){ ps.creator.live=null; return viewCreator(); }
-  const g = state.gifts.find(x=>x.id===L.giftId);
-  const gs = campGifts(c.id);
-  const done = gs.filter(x=>x.status==="REDEEMED").length;
-  let stage;
-  if (!g){
-    stage = `<div class="live-status"><div class="big-win">🏁 All prizes claimed</div>
-      <p style="color:#B9B8C4;margin-block-start:8px;font-size:14px">${done}/${gs.length} redeemed · ${inr(done*c.per)} distributed. What a stream.</p></div>
-      <div class="live-actions"><button class="btn btn-on-dark-outline btn-block" onclick="endLive()">End live session</button></div>`;
-  } else if (g.status==="REDEEMED"){
-    stage = `
-      <div class="live-amt">${inr(g.amount)}</div>
-      <div class="live-status">
-        <div class="big-win">🎉 REDEEMED</div>
-        <p style="color:#B9B8C4;margin-block-start:8px;font-size:13.5px">Claimed by <span class="mono" style="color:#fff">${maskUpi(g.redeemedBy)}</span><br>${fmtDT(g.redeemedAt)} · Ref ${g.txRef}</p>
-      </div>
-      <div class="live-actions">
-        <button class="btn btn-primary btn-block" onclick="liveNext()">Next prize</button>
-        <button class="btn btn-on-dark-outline btn-block" onclick="endLive()">End live session</button>
-      </div>`;
-  } else {
-    stage = `
-      <div class="live-amt">${inr(g.amount)}</div>
-      <p style="color:#B9B8C4;position:relative;margin-block-start:4px;font-size:13px">First successful redemption wins · prize ${done+1} of ${gs.length}</p>
-      <div><span class="live-code">${g.code}</span></div>
-      <div class="live-status"><span style="color:#B9B8C4">Waiting for the first claim</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
-      <div class="live-actions">
-        <div class="row2">
-          <button class="btn btn-primary" onclick="copyText('${g.code}')">Copy code</button>
-          <a class="btn btn-on-dark" href="#/redeem?code=${encodeURIComponent(g.code)}">Open redeem</a>
-        </div>
-        <button class="btn btn-on-dark btn-block" onclick="liveSimulate()">Simulate audience claim</button>
-        <button class="btn btn-on-dark-outline btn-block" onclick="endLive()">End live</button>
-      </div>`;
-  }
-  return `
-  <div class="page-head anim-rise"><h1>Live giveaway</h1>${protoTag()}</div>
-  <div class="live-stage anim-rise d1">
-    <span class="live-badge"><span class="pulse" aria-hidden="true"></span>Live · ${esc(c.name)}</span>
-    ${stage}
-  </div>
-  <p class="hint" style="text-align:center;margin-block-start:12px">This screen polls gift status in real time (mock). Redeem the code from the Redeem tab — or simulate an audience claim — and watch it flip to 🎉 REDEEMED. Recipients stay anonymized as <span class="mono">****@upi</span>.</p>`;
-}
-
-/* ---------- HOW IT WORKS ---------- */
-function viewHow(){
-  return `
-  <div class="page-head anim-rise"><h1>How it works</h1><p class="sub">UPI Gift turns money into a <strong style="color:var(--color-text-primary)">claim</strong>: value is locked up front, represented by a code, and settled to whoever redeems it first — into any eligible UPI ID, chosen at claim time.</p>${protoTag()}</div>
-
-  <div class="flow">
-    <div class="step anim-rise d1"><div class="n">1</div><div><h3>Create &amp; lock</h3><p>Pick an amount. It’s locked from your balance — not sent to anyone. You get a random high-entropy code, or a custom code + 5-digit PIN.</p></div></div>
-    <div class="step anim-rise d2"><div class="n">2</div><div><h3>Share the code</h3><p>WhatsApp it to family, print it, or publish 100 codes in a livestream. The code alone (plus PIN, if locked) is the key.</p></div></div>
-    <div class="step anim-rise d3"><div class="n">3</div><div><h3>Anyone claims</h3><p>The holder enters the code and <em>their own</em> UPI ID. You never needed to know who they’d be — eligibility is proven by possession.</p></div></div>
-    <div class="step anim-rise d4"><div class="n">4</div><div><h3>Single settlement</h3><p>First completed claim wins. The code flips to REDEEMED forever; expired or cancelled gifts refund the creator automatically.</p></div></div>
-  </div>
-
-  <section class="section">
-    <h2 style="font-size:22px;margin-block-end:12px">The future vision</h2>
-    <div class="card pad-lg">
-      <p style="font-size:14.5px;color:var(--color-text-secondary)">Imagine every major UPI app shipping the same four verbs. Pay sends to someone you know. Request asks someone you know. Split divides among people you know. <strong style="color:var(--color-text-primary)">UPI Gift is the missing fourth verb — value for someone you don’t know yet.</strong></p>
-      <div class="phone" style="margin-block-start:18px" aria-hidden="true">
-        <div class="screen"><div style="font-family:var(--font-display);font-weight:800;font-size:16px">A UPI app near you</div><div style="font-size:12px;color:var(--color-text-secondary)">Concept navigation</div></div>
-        <div class="dock">
-          <div><span class="ic">💸</span>Pay</div>
-          <div><span class="ic">📥</span>Request</div>
-          <div><span class="ic">✂️</span>Split</div>
-          <div class="on"><span class="ic">🎁</span>UPI&nbsp;Gift</div>
-        </div>
-      </div>
-      <p style="font-size:14.5px;color:var(--color-text-secondary);margin-block-start:16px">Giveaways, emergency cash handoffs, “code on a poster” public gifts, prize money — all become one primitive: the redeemable code.</p>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2 style="font-size:22px;margin-block-end:12px">A possible regulated architecture</h2>
-    <div class="card pad-lg">
-      <div class="arch">
-        <div class="node">You<small>create &amp; fund the gift</small></div><span class="arr">↓</span>
-        <div class="node">UPI infra<small>collects &amp; settles funds</small></div><span class="arr">↓</span>
-        <div class="node">Regulated partner<small>holds float in escrow</small></div><span class="arr">↓</span>
-        <div class="node">Gift ledger<small>code, status, single-claim lock</small></div><span class="arr">↓</span>
-        <div class="node">Recipient<small>any eligible UPI ID at claim time</small></div>
-      </div>
-      <p class="hint">A real version would need KYC/AML limits, per-code and per-day caps, rate limiting and fraud controls on redemption attempts, refund-on-expiry rules, dispute handling, and NPCI/regulator approval. <strong>This prototype itself uses only simulated money — no real UPI, bank, or NPCI systems are involved, and this is not an official NPCI product.</strong></p>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2 style="font-size:22px;margin-block-end:12px">Why not vouchers or e-RUPI?</h2>
-    <div class="tbl-wrap"><table>
-      <thead><tr><th></th><th>UPI Gift <span class="pill neutral">concept</span></th><th>UPI vouchers in apps</th><th>e-RUPI</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Recipient needed at creation</strong></td><td class="yes">No — anyone with the code</td><td class="no">Usually yes — mobile-linked</td><td class="no">Yes — issued to a mobile/QR</td></tr>
-        <tr><td><strong>Purpose</strong></td><td class="yes">General-purpose digital cash</td><td>Person-to-person gifting</td><td>Purpose-restricted benefits</td></tr>
-        <tr><td><strong>Redeems into</strong></td><td class="yes">Any eligible UPI ID at claim time</td><td>The linked recipient’s account</td><td>The specified beneficiary only</td></tr>
-        <tr><td><strong>Best for</strong></td><td>Creator giveaways, emergencies, public gifts</td><td>Gifting to known contacts</td><td>Targeted, tracked benefit delivery</td></tr>
-      </tbody>
-    </table></div>
-    <p class="swipe-hint">Swipe sideways to compare →</p>
-    <p class="hint" style="margin-block-start:8px">Simplified comparison for concept purposes; real products vary by issuer and app.</p>
-  </section>`;
 }
 
 /* =================================================================
    ROUTER
    ================================================================= */
-let liveTimer = null;
 function route(){
   const h = location.hash.replace(/^#\/?/,"") || "home";
   const [path, qs] = h.split("?");
@@ -1219,8 +900,7 @@ function render(){
   $("#balanceVal").textContent = inr(state.balance);
   const { path, params } = route();
   $$("nav.tabbar a[data-route]").forEach(a=>a.classList.toggle("active", a.dataset.route===path));
-  if (liveTimer){ clearInterval(liveTimer); liveTimer=null; }
-  const views = { home:viewHome, create:viewCreate, redeem:viewRedeem, gifts:viewGifts, creator:viewCreator, how:viewHow };
+  const views = { home:viewHome, create:viewCreate, redeem:viewRedeem, codes:viewCodes };
   const view = views[path] || viewHome;
   if (path==="redeem" && params.get("code") && ps.redeem.step==="code"){
     ps.redeem.prefill = params.get("code");
@@ -1229,27 +909,23 @@ function render(){
   } else {
     $("#view").innerHTML = view();
   }
-  if (path==="creator" && ps.creator.live){
-    liveTimer = setInterval(()=>{ if (ps.creator.live) render(); }, 1500);
-  }
   window.scrollTo({top:0});
 }
 function redeemFindAuto(){
   const code = ps.redeem.prefill; ps.redeem.prefill = null;
   const g = findByCode(code);
   ps.redeem.err = null; ps.redeem.gift = null;
-  if (!g) ps.redeem.err = {t:"Gift not found", d:"We couldn’t find a gift with this code. Check for typos — one wrong character and it won’t match."};
-  else if (g.status==="CANCELLED") ps.redeem.err = {t:"Gift was cancelled", d:"The creator cancelled this gift, so the code no longer works."};
-  else if (g.status==="EXPIRED") ps.redeem.err = {t:"Gift expired", d:`This gift expired on ${fmtDT(g.expiresAt)}.`};
-  else if (g.status==="REDEEMED") ps.redeem.err = {t:"Already redeemed", d:`This gift was claimed on ${fmtDT(g.redeemedAt)} by ${maskUpi(g.redeemedBy)}. Each gift can be claimed only once.`};
-  else { ps.redeem.gift = g.id; ps.redeem.step = g.pin ? "pin" : "confirm"; }
+  if (!g) ps.redeem.err = {t:"Code not found", d:"We couldn’t find a code with this value. Check for typos — one wrong character and it won’t match."};
+  else {
+    const se = statusError(g);
+    if (se) ps.redeem.err = se;
+    else { ps.redeem.gift = g.id; ps.redeem.step = g.pin ? "pin" : "confirm"; }
+  }
   $("#view").innerHTML = viewRedeem();
 }
 window.addEventListener("hashchange", ()=>{
-  if (liveTimer){ clearInterval(liveTimer); liveTimer=null; }
   const { path } = route();
   if (path!=="redeem") ps.redeem = { step:"code", gift:null, err:null, busy:false, done:null, prefill:null };
-  if (path!=="creator") ps.creator.live = null;
   if (path!=="create") ps.create.result = null;
   render();
 });

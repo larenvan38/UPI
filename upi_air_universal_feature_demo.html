@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#111315" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>UPI Air — NPCI Universal Escrow Voucher</title>
+
+  <!-- Inline PWA Manifest -->
+  <link rel="manifest" href='data:application/manifest+json,{"name":"UPI Air","short_name":"UPI Air","start_url":".","display":"standalone","background_color":"#F6F6F3","theme_color":"#111315","description":"Create a payment now. Decide who receives it later."}' />
+
+  <!-- Fonts: Plus Jakarta Sans (UI & Tabular Figures) & JetBrains Mono (Security Codes) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            surface: {
+              canvas: '#F6F6F3',
+              card: '#FFFFFF',
+              subtle: '#EFECE6',
+              border: '#E2E0D8',
+              borderStrong: '#C8C5BA'
+            },
+            ink: {
+              primary: '#111315',
+              secondary: '#4A4D52',
+              muted: '#767A80'
+            },
+            npci: {
+              navy: '#0F172A',
+              emerald: '#047857',
+              emeraldBg: '#ECFDF5',
+              emeraldBorder: '#A7F3D0',
+              ochre: '#B45309',
+              ochreBg: '#FFFBEB',
+              ochreBorder: '#FDE68A',
+              crimson: '#BE123C',
+              crimsonBg: '#FFF1F2',
+              crimsonBorder: '#FECDD3'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #18191B;
+      color: #111315;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.025em;
+    }
+    /* Strict 430px Mobile Viewport Frame */
+    .mobile-shell {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      background-color: #F6F6F3;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid #2A2C30;
+      border-right: 1px solid #2A2C30;
+    }
+    /* Hide scrollbars cleanly */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Tactile Swiss Banking Motion */
+    @keyframes sheetRise {
+      0% { transform: translateY(12px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes checkScale {
+      0% { transform: scale(0.6); opacity: 0; }
+      70% { transform: scale(1.06); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-sheet {
+      animation: sheetRise 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .animate-check {
+      animation: checkScale 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    /* Ticket Perforation Divider */
+    .ticket-divider {
+      position: relative;
+      border-top: 1px dashed #C8C5BA;
+      margin: 16px 0;
+    }
+    .ticket-divider::before,
+    .ticket-divider::after {
+      content: '';
+      position: absolute;
+      top: -9px;
+      width: 16px;
+      height: 16px;
+      background-color: #FFFFFF;
+      border: 1px solid #E2E0D8;
+      border-radius: 9999px;
+    }
+    .ticket-divider::before {
+      left: -25px;
+    }
+    .ticket-divider::after {
+      right: -25px;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    /* Crisp focus states */
+    input:focus, select:focus, button:focus-visible {
+      outline: none;
+    }
+  </style>
+</head>
+<body class="select-none">
+
+  <!-- MOBILE SHELL (Max 430px Centered) -->
+  <div class="mobile-shell pb-24">
+
+    <!-- ========================================================= -->
+    <!-- TOP MODULE BAR (Swiss Utilitarian NPCI Feature Header)    -->
+    <!-- ========================================================= -->
+    <header class="bg-white border-b border-surface-border px-4 pt-3.5 pb-3.5 sticky top-0 z-20">
+      <!-- Row 1: Feature Identity + NPCI Protocol Spec Tag -->
+      <div class="flex items-start justify-between gap-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-npci-emerald"></span>
+            <h1 class="font-extrabold text-[17px] tracking-tight text-ink-primary leading-none">UPI Air</h1>
+            <span class="font-mono text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 bg-surface-subtle text-ink-secondary border border-surface-border rounded">
+              NPCI ESCROW
+            </span>
+          </div>
+          <p class="text-[12px] text-ink-secondary font-medium mt-1 leading-snug">
+            Create a payment now. Decide who receives it later.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onclick="openResetConfirm()"
+          class="text-[11px] font-semibold text-ink-secondary hover:text-ink-primary bg-surface-canvas hover:bg-surface-subtle active:translate-y-px transition px-2.5 py-1.5 rounded border border-surface-border shrink-0"
+        >
+          Reset
+        </button>
+      </div>
+
+      <!-- Row 2: Strict Two Primary Mode Buttons (Create & Redeem) -->
+      <div class="grid grid-cols-2 gap-2 mt-3">
+        <button
+          type="button"
+          id="headerBtnCreate"
+          onclick="switchTab('create')"
+          class="min-h-[44px] rounded-lg font-bold text-[13px] flex items-center justify-center gap-2 transition active:translate-y-px bg-ink-primary text-white border border-ink-primary"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          <span>Create</span>
+        </button>
+
+        <button
+          type="button"
+          id="headerBtnRedeem"
+          onclick="switchTab('redeem')"
+          class="min-h-[44px] rounded-lg font-bold text-[13px] flex items-center justify-center gap-2 transition active:translate-y-px bg-surface-canvas text-ink-primary hover:bg-surface-subtle border border-surface-borderStrong"
+        >
+          <svg class="w-4 h-4 text-npci-emerald" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Redeem</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========================================================= -->
+    <!-- MAIN WORKSPACE                                            -->
+    <!-- ========================================================= -->
+    <main class="flex-1 px-3.5 pt-3.5 pb-6">
+
+      <!-- ======================================================= -->
+      <!-- TAB 1: CREATE UPI AIR                                   -->
+      <!-- ======================================================= -->
+      <section id="view-create" class="space-y-3 animate-sheet">
+
+        <!-- Section 1: Debit Account & Amount Sheet -->
+        <div class="bg-white rounded-xl border border-surface-border overflow-hidden">
+          <!-- Native Bank Account Strip (Like UPI Lite / Bank Header) -->
+          <div class="px-3.5 py-2.5 bg-surface-canvas border-b border-surface-border flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-6 h-6 rounded bg-white border border-surface-border flex items-center justify-center">
+                <svg class="w-3.5 h-3.5 text-ink-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+              </div>
+              <div>
+                <div class="text-[12px] font-bold text-ink-primary leading-none">Primary Bank A/c •••• 4821</div>
+                <div class="text-[10px] text-ink-muted mt-0.5">Amount blocked on creation • Debited on claim</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-[10px] uppercase tracking-wider font-semibold text-ink-muted">Avail. Bal</div>
+              <div id="createBalanceHint" class="text-[12px] font-extrabold text-ink-primary tabular-nums">Rs 9,200</div>
+            </div>
+          </div>
+
+          <!-- Currency Input Area -->
+          <div class="p-3.5">
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="createAmount" class="text-[11px] font-bold uppercase tracking-wider text-ink-secondary">
+                Voucher Amount
+              </label>
+              <span id="blockedInlineIndicator" class="text-[11px] font-mono font-medium text-npci-ochre">
+                Blocked: Rs 800
+              </span>
+            </div>
+
+            <div class="relative flex items-baseline bg-surface-canvas border border-surface-borderStrong focus-within:border-ink-primary focus-within:bg-white rounded-lg px-3.5 py-2.5 transition">
+              <span class="text-xl font-bold text-ink-secondary mr-2 select-none">Rs</span>
+              <input
+                id="createAmount"
+                type="number"
+                inputmode="numeric"
+                placeholder="500"
+                value="500"
+                oninput="handleCreateAmountChange()"
+                class="w-full bg-transparent text-3xl font-extrabold text-ink-primary tabular-nums focus:outline-none"
+              />
+            </div>
+
+            <!-- Denomination Quick Chips -->
+            <div class="grid grid-cols-3 gap-2 mt-2.5">
+              <button
+                type="button"
+                onclick="setQuickAmount(100)"
+                class="py-2 rounded-lg bg-surface-canvas hover:bg-surface-subtle active:translate-y-px transition text-[12px] font-bold text-ink-primary tabular-nums border border-surface-border"
+              >
+                Rs 100
+              </button>
+              <button
+                type="button"
+                onclick="setQuickAmount(500)"
+                class="py-2 rounded-lg bg-surface-canvas hover:bg-surface-subtle active:translate-y-px transition text-[12px] font-bold text-ink-primary tabular-nums border border-surface-border"
+              >
+                Rs 500
+              </button>
+              <button
+                type="button"
+                onclick="setQuickAmount(1000)"
+                class="py-2 rounded-lg bg-surface-canvas hover:bg-surface-subtle active:translate-y-px transition text-[12px] font-bold text-ink-primary tabular-nums border border-surface-border"
+              >
+                Rs 1,000
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Claim Code Configuration -->
+        <div class="bg-white rounded-xl p-3.5 border border-surface-border">
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-[11px] font-bold uppercase tracking-wider text-ink-secondary">Claim Code Mode</label>
+          </div>
+
+          <!-- Segmented Control -->
+          <div class="grid grid-cols-2 gap-1.5 p-1 bg-surface-canvas border border-surface-border rounded-lg">
+            <button
+              type="button"
+              id="btnCodeRandom"
+              onclick="setCodeType('random')"
+              class="py-2 px-2.5 rounded-md text-[12px] font-bold transition bg-ink-primary text-white"
+            >
+              Random 16-Char
+            </button>
+            <button
+              type="button"
+              id="btnCodeCustom"
+              onclick="setCodeType('custom')"
+              class="py-2 px-2.5 rounded-md text-[12px] font-bold transition text-ink-secondary hover:text-ink-primary"
+            >
+              Custom + 5-Digit Lock
+            </button>
+          </div>
+
+          <!-- Option A: Random 16-Char Preview -->
+          <div id="randomCodePreviewBox" class="mt-3 flex items-center justify-between bg-surface-canvas border border-surface-border rounded-lg px-3 py-2.5">
+            <div>
+              <div class="text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Generated Token Format</div>
+              <div id="sampleRandomCodeText" class="font-mono text-[12px] font-bold text-ink-primary mt-0.5 tracking-wider">AIR9-7K4X-M2P8-Q5LW</div>
+            </div>
+            <span class="font-mono text-[10px] font-semibold text-npci-emerald bg-npci-emeraldBg border border-npci-emeraldBorder px-2 py-0.5 rounded">
+              NO LOCK NEEDED
+            </span>
+          </div>
+
+          <!-- Option B: Custom Code + 5-Digit Numeric Lock -->
+          <div id="customCodeInputBox" class="hidden mt-3 space-y-3">
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label for="customCodeInput" class="text-[11px] font-bold text-ink-secondary">Custom Code (5–12 chars)</label>
+                <button type="button" onclick="fillSampleCustom()" class="text-[11px] font-semibold text-npci-emerald hover:underline">
+                  Fill sample
+                </button>
+              </div>
+              <input
+                id="customCodeInput"
+                type="text"
+                maxlength="12"
+                placeholder="e.g. MANOJ500"
+                oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')"
+                class="w-full font-mono text-[15px] font-bold uppercase tracking-wider bg-surface-canvas border border-surface-borderStrong focus:border-ink-primary focus:bg-white rounded-lg px-3 py-2.5 text-ink-primary"
+              />
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label for="customLockInput" class="text-[11px] font-bold text-ink-secondary">5-Digit Numeric Lock</label>
+                <span class="text-[10px] font-medium text-ink-muted">3 wrong tries locks Air for 10m</span>
+              </div>
+              <input
+                id="customLockInput"
+                type="text"
+                inputmode="numeric"
+                maxlength="5"
+                placeholder="e.g. 54311"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)"
+                class="w-full font-mono text-[15px] font-bold tracking-[0.25em] bg-surface-canvas border border-surface-borderStrong focus:border-ink-primary focus:bg-white rounded-lg px-3 py-2.5 text-ink-primary"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Validity Period (24 Hours, 15 Days, 30 Days) -->
+        <div class="bg-white rounded-xl p-3.5 border border-surface-border">
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-[11px] font-bold uppercase tracking-wider text-ink-secondary">Validity Period</label>
+            <span class="text-[10px] text-ink-muted">Auto-unblocks if unclaimed</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2" id="expiryButtons">
+            <button
+              type="button"
+              onclick="setExpiryChoice('24h')"
+              data-exp="24h"
+              class="exp-btn py-2.5 rounded-lg text-[12px] font-bold border-2 border-ink-primary bg-white text-ink-primary transition"
+            >
+              24 Hours
+            </button>
+            <button
+              type="button"
+              onclick="setExpiryChoice('15d')"
+              data-exp="15d"
+              class="exp-btn py-2.5 rounded-lg text-[12px] font-bold border border-surface-border bg-surface-canvas text-ink-secondary transition"
+            >
+              15 Days
+            </button>
+            <button
+              type="button"
+              onclick="setExpiryChoice('30d')"
+              data-exp="30d"
+              class="exp-btn py-2.5 rounded-lg text-[12px] font-bold border border-surface-border bg-surface-canvas text-ink-secondary transition"
+            >
+              30 Days
+            </button>
+          </div>
+        </div>
+
+        <!-- Primary Action Button (Min 48px Height) -->
+        <button
+          type="button"
+          onclick="handleCreateAirSubmit()"
+          class="w-full min-h-[50px] bg-ink-primary hover:bg-slate-800 active:translate-y-px text-white font-bold text-[14px] rounded-xl flex items-center justify-center gap-2 transition tabular-nums"
+        >
+          <span id="createSubmitBtnText">Create UPI Air • Rs 500</span>
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </button>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 2: REDEEM UPI AIR                                   -->
+      <!-- ======================================================= -->
+      <section id="view-redeem" class="hidden space-y-3 animate-sheet">
+
+        <!-- Redeem Input Sheet (Distinct Tactile Dropdown + Single Code Input + Conditional Lock) -->
+        <div class="bg-white rounded-xl p-3.5 border border-surface-border space-y-3.5">
+          <!-- Step 1: Tactile Dropdown Menu (Clearly Distinct from Text Inputs) -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="redeemTypeSelect" class="text-[11px] font-bold text-ink-secondary uppercase tracking-wider">
+                1. Voucher Code Type
+              </label>
+              <span class="font-mono text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-subtle text-ink-secondary border border-surface-border">
+                DROPDOWN MENU
+              </span>
+            </div>
+
+            <div class="relative flex items-center bg-[#EFECE6] hover:bg-[#E7E3DA] border-2 border-ink-primary/80 rounded-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] transition">
+              <!-- Left Selector Badge -->
+              <div class="pl-3 pr-1.5 py-2.5 pointer-events-none flex items-center">
+                <span class="font-mono text-[10px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded bg-white text-ink-primary border border-surface-borderStrong shadow-2xs">
+                  MODE
+                </span>
+              </div>
+
+              <select
+                id="redeemTypeSelect"
+                onchange="handleRedeemTypeDropdownChange(this.value)"
+                class="w-full appearance-none bg-transparent py-2.5 pl-1.5 pr-12 text-[13px] font-extrabold text-ink-primary cursor-pointer"
+              >
+                <option value="random">Alphanumeric Code (16-char)</option>
+                <option value="custom">Custom Code (+ 5-Digit Lock)</option>
+              </select>
+
+              <!-- Highlighted Right-Side Dropdown Trigger Housing -->
+              <div class="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-8 px-2.5 rounded-lg bg-ink-primary text-white flex items-center gap-1 shadow-xs">
+                <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Single Claim Code Input Field -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label id="redeemCodeLabel" for="redeemCodeInput" class="text-[11px] font-bold text-ink-secondary uppercase tracking-wider">
+                2. Paste 16-Character Alphanumeric Code
+              </label>
+              <span id="redeemFormatHint" class="font-mono text-[10px] text-ink-muted">Case & dash insensitive</span>
+            </div>
+
+            <div class="relative">
+              <input
+                id="redeemCodeInput"
+                type="text"
+                placeholder="XXXX-XXXX-XXXX-XXXX"
+                oninput="handleRedeemCodeInput(this.value)"
+                class="w-full font-mono text-[16px] font-bold uppercase tracking-wider bg-surface-canvas border border-surface-borderStrong focus:border-ink-primary focus:bg-white rounded-lg pl-3 pr-9 py-2.5 text-ink-primary"
+              />
+              <button
+                type="button"
+                id="clearRedeemCodeBtn"
+                onclick="clearRedeemInput()"
+                aria-label="Clear code"
+                class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink-primary p-1 text-xs font-mono"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+
+          <!-- Conditional Step 3: 5-Digit Digital Lock Field (ONLY shown when Custom Code is selected) -->
+          <div id="redeemCustomLockWrapper" class="hidden pt-0.5">
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="redeemLockInput" class="text-[11px] font-bold text-npci-ochre uppercase tracking-wider">
+                3. Enter 5-Digit Digital Lock
+              </label>
+              <span class="font-mono text-[10px] font-semibold text-npci-ochre">Max 3 wrong attempts</span>
+            </div>
+            <input
+              id="redeemLockInput"
+              type="text"
+              inputmode="numeric"
+              maxlength="5"
+              placeholder="e.g. 54311"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5); handleRedeemLockInput();"
+              class="w-full font-mono text-[18px] font-bold tracking-[0.3em] bg-npci-ochreBg border border-npci-ochreBorder focus:border-npci-ochre focus:bg-white rounded-lg px-3 py-2.5 text-ink-primary"
+            />
+          </div>
+
+          <!-- Active Demo Codes Bar for Quick 1-Tap Testing -->
+          <div class="pt-2 border-t border-surface-border">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-ink-muted mb-1.5">
+              Active Demo Vouchers (Tap to autofill)
+            </div>
+            <div id="redeemQuickSuggestions" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5"></div>
+          </div>
+        </div>
+
+        <!-- Live Verification & Escrow Status Panel -->
+        <div id="redeemLookupContainer"></div>
+
+        <!-- Settlement Destination & Primary Redeem Button -->
+        <div class="bg-white rounded-xl p-3.5 border border-surface-border space-y-3">
+          <div class="flex items-center justify-between bg-surface-canvas border border-surface-border rounded-lg px-3 py-2">
+            <div class="flex items-center gap-2.5">
+              <div class="w-6 h-6 rounded bg-white border border-surface-border flex items-center justify-center">
+                <svg class="w-3.5 h-3.5 text-npci-emerald" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <div class="text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Instant Settlement To</div>
+                <div class="text-[12px] font-bold text-ink-primary">Primary Bank A/c •••• 8910</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Receiver Bal</div>
+              <div id="receiverBalanceHint" class="text-[12px] font-extrabold text-npci-emerald tabular-nums">Rs 0</div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            id="redeemSubmitBtn"
+            onclick="handleRedeemSubmit()"
+            disabled
+            class="w-full min-h-[50px] bg-npci-emerald hover:bg-emerald-800 disabled:bg-surface-subtle disabled:text-ink-muted disabled:border disabled:border-surface-border active:translate-y-px text-white font-bold text-[14px] rounded-xl transition flex items-center justify-center gap-2 tabular-nums"
+          >
+            <span id="redeemSubmitBtnText">Enter a Valid Code to Redeem</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 3: MY AIRS (ESCROW LEDGER)                          -->
+      <!-- ======================================================= -->
+      <section id="view-myairs" class="hidden space-y-3 animate-sheet">
+
+        <!-- Ledger Summary Strip -->
+        <div class="bg-white rounded-xl p-3 border border-surface-border flex items-center justify-between text-[12px]">
+          <div>
+            <span class="text-ink-muted font-medium">Sender Avail:</span>
+            <span id="ledgerSenderAvail" class="font-extrabold text-ink-primary tabular-nums ml-1">Rs 9,200</span>
+          </div>
+          <div class="h-3 w-px bg-surface-border"></div>
+          <div>
+            <span class="text-ink-muted font-medium">Blocked in Airs:</span>
+            <span id="ledgerSenderBlocked" class="font-extrabold text-npci-ochre tabular-nums ml-1">Rs 800</span>
+          </div>
+        </div>
+
+        <!-- Status Filter Segmented Bar -->
+        <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-surface-border">
+          <button type="button" onclick="setMyAirsFilter('ALL')" data-filter="ALL" class="filter-pill py-1.5 rounded-lg text-[11px] font-bold bg-ink-primary text-white transition">
+            All
+          </button>
+          <button type="button" onclick="setMyAirsFilter('ACTIVE')" data-filter="ACTIVE" class="filter-pill py-1.5 rounded-lg text-[11px] font-bold text-ink-secondary hover:text-ink-primary transition">
+            Active
+          </button>
+          <button type="button" onclick="setMyAirsFilter('REDEEMED')" data-filter="REDEEMED" class="filter-pill py-1.5 rounded-lg text-[11px] font-bold text-ink-secondary hover:text-ink-primary transition">
+            Redeemed
+          </button>
+          <button type="button" onclick="setMyAirsFilter('INACTIVE')" data-filter="INACTIVE" class="filter-pill py-1.5 rounded-lg text-[11px] font-bold text-ink-secondary hover:text-ink-primary transition">
+            Exp / Canc
+          </button>
+        </div>
+
+        <!-- Ledger Rows Container -->
+        <div id="myAirsListContainer" class="space-y-2"></div>
+      </section>
+
+      <!-- Utilitarian Footer -->
+      <footer class="mt-6 pt-3 border-t border-surface-border text-[11px] text-ink-muted flex items-center justify-between px-0.5">
+        <span>NPCI UPI Air Escrow Demo • LocalStorage</span>
+        <button type="button" onclick="openResetConfirm()" class="text-ink-primary font-semibold underline underline-offset-2 hover:text-npci-crimson">
+          Reset demo
+        </button>
+      </footer>
+    </main>
+
+    <!-- ========================================================= -->
+    <!-- BOTTOM NAVIGATION BAR (3 Tabs, Crisp Hairline Border)     -->
+    <!-- ========================================================= -->
+    <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white border-t border-surface-border px-2.5 py-1.5 z-30 grid grid-cols-3 gap-1.5">
+      <button
+        type="button"
+        id="nav-create"
+        onclick="switchTab('create')"
+        class="min-h-[48px] rounded-lg flex flex-col items-center justify-center gap-0.5 text-ink-primary bg-surface-subtle font-bold transition"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        <span class="text-[11px]">Create</span>
+      </button>
+
+      <button
+        type="button"
+        id="nav-redeem"
+        onclick="switchTab('redeem')"
+        class="min-h-[48px] rounded-lg flex flex-col items-center justify-center gap-0.5 text-ink-muted hover:text-ink-primary font-semibold transition"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span class="text-[11px]">Redeem</span>
+      </button>
+
+      <button
+        type="button"
+        id="nav-myairs"
+        onclick="switchTab('myairs')"
+        class="min-h-[48px] rounded-lg flex flex-col items-center justify-center gap-0.5 text-ink-muted hover:text-ink-primary font-semibold transition relative"
+      >
+        <div class="relative flex items-center">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          <span id="navMyAirsBadge" class="hidden ml-1 bg-ink-primary text-white font-mono text-[10px] font-bold px-1.5 py-0.2 rounded">0</span>
+        </div>
+        <span class="text-[11px]">My Airs</span>
+      </button>
+    </nav>
+
+    <!-- ========================================================= -->
+    <!-- MODAL 1: ESCROW VOUCHER RECEIPT                           -->
+    <!-- ========================================================= -->
+    <div id="airModalOverlay" class="hidden fixed inset-0 z-40 bg-black/60 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="w-full max-w-[430px] bg-white rounded-t-2xl sm:rounded-2xl p-4 max-h-[92dvh] overflow-y-auto animate-sheet border-t border-surface-border">
+        <!-- Sheet Header -->
+        <div class="flex items-center justify-between pb-3 border-b border-surface-border">
+          <div class="flex items-center gap-2">
+            <span id="modalStatusDot" class="w-2 h-2 rounded-full bg-npci-emerald"></span>
+            <h3 id="modalTitleText" class="font-extrabold text-[14px] text-ink-primary uppercase tracking-wider">UPI Air Escrow Voucher</h3>
+          </div>
+          <button
+            type="button"
+            onclick="closeAirModal()"
+            class="w-7 h-7 rounded-lg bg-surface-canvas hover:bg-surface-subtle border border-surface-border flex items-center justify-center text-ink-secondary font-mono text-xs"
+          >
+            ✕
+          </button>
+        </div>
+
+        <!-- Perforated Bank Escrow Ticket (Code-only, zero QR) -->
+        <div class="mt-3 bg-surface-canvas border border-surface-borderStrong rounded-xl p-4 relative overflow-hidden">
+          <!-- Ticket Header -->
+          <div class="flex items-center justify-between">
+            <span id="modalAppPill" class="font-mono text-[10px] font-semibold text-ink-secondary uppercase tracking-wider">
+              DEBIT A/C •••• 4821
+            </span>
+            <span id="modalStateBadge" class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-npci-emeraldBg text-npci-emerald border border-npci-emeraldBorder">
+              ACTIVE • ESCROW HELD
+            </span>
+          </div>
+
+          <!-- Amount -->
+          <div class="mt-3 text-center">
+            <div class="text-[10px] font-mono uppercase tracking-wider text-ink-muted">Escrow Voucher Value</div>
+            <div id="modalAmountText" class="text-3xl font-extrabold text-ink-primary tabular-nums mt-0.5">Rs 500</div>
+          </div>
+
+          <!-- Perforated Divider -->
+          <div class="ticket-divider"></div>
+
+          <!-- Tap-to-copy Monospace Claim Code Box -->
+          <div
+            onclick="copyCurrentModalCode()"
+            role="button"
+            tabindex="0"
+            class="bg-ink-primary hover:bg-slate-800 active:translate-y-px text-white rounded-lg p-3.5 cursor-pointer transition text-center"
+          >
+            <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-slate-400 mb-1">
+              <span>CLAIM CODE</span>
+              <span>TAP TO COPY</span>
+            </div>
+            <div id="modalCodeText" class="font-mono text-[18px] font-bold tracking-wider text-white break-all select-all">
+              XXXX-XXXX-XXXX-XXXX
+            </div>
+          </div>
+
+          <!-- Separate 5-Digit Lock Callout (Shown ONLY if Custom Air) -->
+          <div id="modalLockBox" class="hidden mt-2.5 bg-npci-ochreBg border border-npci-ochreBorder rounded-lg p-2.5 flex items-center justify-between">
+            <div>
+              <div class="font-mono text-[10px] font-bold uppercase tracking-wider text-npci-ochre">5-Digit Security Lock</div>
+              <div class="text-[11px] text-ink-secondary font-medium">Share the lock separately</div>
+            </div>
+            <button
+              type="button"
+              onclick="copyCurrentModalLock()"
+              class="font-mono text-[15px] font-bold tracking-widest bg-white text-ink-primary px-3 py-1 rounded border border-npci-ochreBorder active:translate-y-px"
+              id="modalLockText"
+            >
+              54311
+            </button>
+          </div>
+
+          <!-- Timestamp & Expiry Metadata -->
+          <div class="mt-3 pt-2.5 border-t border-surface-border flex items-center justify-between text-[11px] text-ink-secondary font-mono">
+            <span id="modalCreatedTimeText">Created just now</span>
+            <span id="modalExpiryText" class="font-semibold text-ink-primary">Expires in 24h</span>
+          </div>
+
+          <!-- Redeemed Settlement Box (if redeemed) -->
+          <div id="modalRedeemedInfoBox" class="hidden mt-2.5 bg-npci-emeraldBg border border-npci-emeraldBorder rounded-lg p-2.5 text-left text-xs text-npci-emerald">
+            <div class="font-bold">✓ Settled to Receiver's Primary Bank A/c •••• 8910</div>
+            <div class="text-[11px] mt-0.5 font-mono">Claimed <span id="modalRedeemedTime"></span></div>
+          </div>
+        </div>
+
+        <!-- Primary Share / Copy Actions -->
+        <div class="mt-3 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onclick="copyCurrentModalCode()"
+            class="min-h-[46px] rounded-lg bg-surface-canvas hover:bg-surface-subtle active:translate-y-px border border-surface-borderStrong text-ink-primary font-bold text-[12px] flex items-center justify-center gap-1.5 transition"
+          >
+            <span>Copy Code</span>
+          </button>
+          <button
+            type="button"
+            onclick="shareCurrentModalAir()"
+            class="min-h-[46px] rounded-lg bg-ink-primary hover:bg-slate-800 active:translate-y-px text-white font-bold text-[12px] flex items-center justify-center gap-1.5 transition"
+          >
+            <span>Share Voucher</span>
+          </button>
+        </div>
+
+        <!-- Secondary Action: Quick Redeem Test -->
+        <div class="mt-2">
+          <button
+            type="button"
+            id="modalTestRedeemBtn"
+            onclick="jumpToRedeemFromModal()"
+            class="w-full min-h-[42px] rounded-lg bg-npci-emeraldBg hover:bg-emerald-100 border border-npci-emeraldBorder text-npci-emerald font-bold text-[12px] flex items-center justify-center gap-1.5 transition"
+          >
+            <span>Test Redeem with this Code →</span>
+          </button>
+        </div>
+
+        <!-- Active Escrow Controls: Cancel & Unblock -->
+        <div id="modalActiveManageRow" class="mt-3 pt-3 border-t border-surface-border flex items-center gap-2">
+          <button
+            type="button"
+            onclick="cancelCurrentModalAir()"
+            class="flex-1 min-h-[44px] rounded-lg bg-npci-crimsonBg hover:bg-rose-100 border border-npci-crimsonBorder text-npci-crimson font-bold text-[12px] transition"
+          >
+            Cancel & Unblock Funds
+          </button>
+          <button
+            type="button"
+            onclick="expireCurrentModalAirNow()"
+            class="px-3 min-h-[44px] rounded-lg bg-surface-canvas hover:bg-surface-subtle border border-surface-border text-ink-secondary font-semibold text-[11px] transition"
+            title="Simulate expiry immediately to verify auto-unblock"
+          >
+            Simulate Expiry
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODAL 2: REDEEM SETTLEMENT RECEIPT                        -->
+    <!-- ========================================================= -->
+    <div id="redeemSuccessModal" class="hidden fixed inset-0 z-50 bg-black/65 flex items-center justify-center p-4">
+      <div class="w-full max-w-[380px] bg-white rounded-2xl p-5 text-center animate-sheet border border-surface-border">
+        <div class="w-14 h-14 rounded-full bg-npci-emeraldBg border border-npci-emeraldBorder text-npci-emerald mx-auto flex items-center justify-center animate-check">
+          <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+
+        <div class="mt-3 inline-block font-mono text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded bg-surface-canvas border border-surface-border text-ink-secondary">
+          Sent via UPI Air
+        </div>
+
+        <h3 id="successAmountTitle" class="text-3xl font-extrabold text-ink-primary tabular-nums mt-2">Rs 500 received</h3>
+        <p class="text-[12px] text-ink-secondary mt-0.5">Settled directly to your linked bank account</p>
+
+        <div class="mt-4 bg-surface-canvas border border-surface-border rounded-xl p-3 text-left space-y-2 text-[12px]">
+          <div class="flex justify-between">
+            <span class="text-ink-muted">Credited To</span>
+            <span class="font-bold text-ink-primary">Primary Bank A/c •••• 8910</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-ink-muted">Voucher Code</span>
+            <span id="successClaimedCode" class="font-mono font-bold text-ink-primary">MANOJ500</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onclick="closeRedeemSuccessModal()"
+          class="mt-4 w-full min-h-[46px] bg-ink-primary hover:bg-slate-800 text-white font-bold text-[13px] rounded-xl transition"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODAL 4: RESET CONFIRMATION                               -->
+    <!-- ========================================================= -->
+    <div id="resetConfirmModal" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+      <div class="w-full max-w-[350px] bg-white rounded-2xl p-5 text-center animate-sheet border border-surface-border">
+        <h3 class="font-extrabold text-[15px] text-ink-primary">Reset Demo Data?</h3>
+        <p class="text-[12px] text-ink-secondary mt-1.5 leading-relaxed">
+          Restores Sender Balance to <strong>Rs 10,000</strong>, Receiver Balance to <strong>Rs 0</strong>, and loads 2 active sample vouchers.
+        </p>
+        <div class="mt-4 grid grid-cols-2 gap-2">
+          <button type="button" onclick="closeResetConfirm()" class="min-h-[44px] rounded-lg bg-surface-canvas border border-surface-border font-bold text-xs text-ink-primary">
+            Cancel
+          </button>
+          <button type="button" onclick="confirmResetDemo()" class="min-h-[44px] rounded-lg bg-npci-crimson text-white font-bold text-xs">
+            Reset Demo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toastContainer" class="fixed top-3 left-1/2 -translate-x-1/2 z-50 w-full max-w-[400px] px-4 pointer-events-none space-y-1.5"></div>
+
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- APPLICATION LOGIC & LOCALSTORAGE STATE                    -->
+  <!-- ========================================================= -->
+  <script>
+    const STORAGE_KEY = 'upi_air_npci_pro_max_v5';
+
+    // UI State
+    let currentTab = 'create';
+    let selectedCodeType = 'random'; // 'random' | 'custom'
+    let selectedExpiryKey = '24h';   // '24h' | '15d' | '30d'
+    let redeemSelectedType = 'random'; // 'random' | 'custom'
+    let myAirsFilter = 'ALL';
+
+    // Current Modal Air ID
+    let activeModalAirId = null;
+
+    // Persistent Store
+    let store = {
+      senderBalance: 10000,
+      receiverBalance: 0,
+      airs: []
+    };
+
+    // Format currency in Indian Numbering Format with "Rs "
+    function formatRs(amount) {
+      const num = Number(amount) || 0;
+      return 'Rs ' + num.toLocaleString('en-IN');
+    }
+
+    // Normalize code (uppercase, remove dashes & whitespace)
+    function normalizeCode(str) {
+      return (str || '').toUpperCase().replace(/[\s-]/g, '');
+    }
+
+    // Format 16-char code as XXXX-XXXX-XXXX-XXXX
+    function formatRandom16(raw) {
+      const clean = normalizeCode(raw);
+      if (clean.length !== 16) return clean;
+      return clean.match(/.{1,4}/g).join('-');
+    }
+
+    // Generate unique 16-char alphanumeric code
+    function generateUnique16Code() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      while (true) {
+        let raw = '';
+        for (let i = 0; i < 16; i++) {
+          raw += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        const exists = store.airs.some(a => normalizeCode(a.code) === raw);
+        if (!exists) {
+          return formatRandom16(raw);
+        }
+      }
+    }
+
+    // Seed Store (Sender starts at Rs 10,000; 2 active sample Airs block Rs 800 -> Avail Rs 9,200)
+    function createInitialStore() {
+      const now = Date.now();
+      return {
+        senderBalance: 9200,
+        receiverBalance: 0,
+        airs: [
+          {
+            id: 'air_seed_1',
+            code: 'SUNDAY500',
+            codeType: 'custom',
+            lock: '54311',
+            wrongAttempts: 0,
+            lockedUntil: null,
+            amount: 500,
+            status: 'ACTIVE',
+            createdAt: now - 12 * 60 * 1000,
+            expiresAt: now + 24 * 60 * 60 * 1000,
+            expiryLabel: '24 Hours',
+            redeemedAt: null
+          },
+          {
+            id: 'air_seed_2',
+            code: 'AIR7-9K2M-X4P8-Q3LW',
+            codeType: 'random',
+            lock: null,
+            wrongAttempts: 0,
+            lockedUntil: null,
+            amount: 300,
+            status: 'ACTIVE',
+            createdAt: now - 38 * 60 * 1000,
+            expiresAt: now + 15 * 24 * 60 * 60 * 1000,
+            expiryLabel: '15 Days',
+            redeemedAt: null
+          }
+        ]
+      };
+    }
+
+    function loadStore() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          store = createInitialStore();
+          saveStore();
+        } else {
+          const parsed = JSON.parse(raw);
+          if (typeof parsed.senderBalance === 'number' && Array.isArray(parsed.airs)) {
+            store = parsed;
+          } else {
+            store = createInitialStore();
+            saveStore();
+          }
+        }
+      } catch (e) {
+        store = createInitialStore();
+      }
+    }
+
+    function saveStore() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+      } catch (e) {
+        console.error('Storage error', e);
+      }
+      updateBalanceIndicators();
+    }
+
+    // Automatic Expiry Check & Unblock Engine
+    function checkExpiries(silent = false) {
+      const now = Date.now();
+      let expiredCount = 0;
+      let unblockedSum = 0;
+
+      store.airs.forEach(air => {
+        if (air.status === 'ACTIVE' && now >= air.expiresAt) {
+          air.status = 'EXPIRED';
+          store.senderBalance += Number(air.amount);
+          expiredCount++;
+          unblockedSum += Number(air.amount);
+        }
+      });
+
+      if (expiredCount > 0) {
+        saveStore();
+        renderMyAirsList();
+        renderRedeemQuickSuggestions();
+        if (currentTab === 'redeem') {
+          handleRedeemCodeInput(document.getElementById('redeemCodeInput').value);
+        }
+        if (!silent) {
+          showToast(`${expiredCount} Air expired. ${formatRs(unblockedSum)} unblocked to Sender A/c.`, 'ochre');
+        }
+      }
+    }
+
+    // Sync Subtle Inline Balance Indicators (No 3 Header Cards)
+    function updateBalanceIndicators() {
+      const activeAirs = store.airs.filter(a => a.status === 'ACTIVE');
+      const blockedTotal = activeAirs.reduce((acc, a) => acc + Number(a.amount), 0);
+
+      const createBalEl = document.getElementById('createBalanceHint');
+      if (createBalEl) createBalEl.textContent = formatRs(store.senderBalance);
+
+      const blockedInlineEl = document.getElementById('blockedInlineIndicator');
+      if (blockedInlineEl) blockedInlineEl.textContent = `Blocked for Airs: ${formatRs(blockedTotal)}`;
+
+      const receiverBalEl = document.getElementById('receiverBalanceHint');
+      if (receiverBalEl) receiverBalEl.textContent = formatRs(store.receiverBalance);
+
+      const ledgerAvail = document.getElementById('ledgerSenderAvail');
+      if (ledgerAvail) ledgerAvail.textContent = formatRs(store.senderBalance);
+
+      const ledgerBlocked = document.getElementById('ledgerSenderBlocked');
+      if (ledgerBlocked) ledgerBlocked.textContent = formatRs(blockedTotal);
+
+      const navBadge = document.getElementById('navMyAirsBadge');
+      if (navBadge) {
+        if (activeAirs.length > 0) {
+          navBadge.textContent = activeAirs.length;
+          navBadge.classList.remove('hidden');
+        } else {
+          navBadge.classList.add('hidden');
+        }
+      }
+    }
+
+    // Tab Switching (Syncs Header Create/Redeem Buttons + Bottom Tab Bar)
+    function switchTab(tab) {
+      currentTab = tab;
+      ['create', 'redeem', 'myairs'].forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        const nav = document.getElementById(`nav-${t}`);
+        if (t === tab) {
+          view.classList.remove('hidden');
+          nav.className = 'min-h-[48px] rounded-lg flex flex-col items-center justify-center gap-0.5 text-ink-primary bg-surface-subtle font-bold transition relative';
+        } else {
+          view.classList.add('hidden');
+          nav.className = 'min-h-[48px] rounded-lg flex flex-col items-center justify-center gap-0.5 text-ink-muted hover:text-ink-primary font-semibold transition relative';
+        }
+      });
+
+      const hdrCreate = document.getElementById('headerBtnCreate');
+      const hdrRedeem = document.getElementById('headerBtnRedeem');
+      if (tab === 'create') {
+        hdrCreate.className = 'min-h-[44px] rounded-lg font-bold text-[13px] flex items-center justify-center gap-2 transition active:translate-y-px bg-ink-primary text-white border border-ink-primary';
+        hdrRedeem.className = 'min-h-[44px] rounded-lg font-bold text-[13px] flex items-center justify-center gap-2 transition active:translate-y-px bg-surface-canvas text-ink-primary hover:bg-surface-subtle border border-surface-borderStrong';
+      } else if (tab === 'redeem') {
+        hdrRedeem.className = 'min-h-[44px] rounded-lg font-bold text-[13px] flex items-center justify-center gap-2 transition active:translate-y-px bg-ink-primary text-white border border-ink-primary';
+        hdrCreate.className = 'min-h-[44px] rounded-lg font-bold text-[13px] flex items-center justify-center gap-2 transition active:translate-y-px bg-surface-canvas text-ink-primary hover:bg-surface-subtle border border-surface-borderStrong';
+      } else {
+        hdrCreate.className = 'min-h-[44px] rounded-lg font-bold text-[13px] flex items-center justify-center gap-2 transition active:translate-y-px bg-surface-canvas text-ink-primary hover:bg-surface-subtle border border-surface-borderStrong';
+        hdrRedeem.className = 'min-h-[44px] rounded-lg font-bold text-[13px] flex items-center justify-center gap-2 transition active:translate-y-px bg-surface-canvas text-ink-primary hover:bg-surface-subtle border border-surface-borderStrong';
+      }
+
+      if (tab === 'redeem') {
+        renderRedeemQuickSuggestions();
+        handleRedeemCodeInput(document.getElementById('redeemCodeInput').value);
+      } else if (tab === 'myairs') {
+        renderMyAirsList();
+      }
+    }
+
+    // Create Tab Logic
+    function setQuickAmount(val) {
+      document.getElementById('createAmount').value = val;
+      handleCreateAmountChange();
+    }
+
+    function handleCreateAmountChange() {
+      const raw = Number(document.getElementById('createAmount').value) || 0;
+      document.getElementById('createSubmitBtnText').textContent = `Create UPI Air • ${formatRs(raw)}`;
+    }
+
+    function setCodeType(type) {
+      selectedCodeType = type;
+      const btnRandom = document.getElementById('btnCodeRandom');
+      const btnCustom = document.getElementById('btnCodeCustom');
+      const randomBox = document.getElementById('randomCodePreviewBox');
+      const customBox = document.getElementById('customCodeInputBox');
+
+      if (type === 'random') {
+        btnRandom.className = 'py-2 px-2.5 rounded-md text-[12px] font-bold transition bg-ink-primary text-white';
+        btnCustom.className = 'py-2 px-2.5 rounded-md text-[12px] font-bold transition text-ink-secondary hover:text-ink-primary';
+        randomBox.classList.remove('hidden');
+        customBox.classList.add('hidden');
+        document.getElementById('sampleRandomCodeText').textContent = generateUnique16Code();
+      } else {
+        btnCustom.className = 'py-2 px-2.5 rounded-md text-[12px] font-bold transition bg-ink-primary text-white';
+        btnRandom.className = 'py-2 px-2.5 rounded-md text-[12px] font-bold transition text-ink-secondary hover:text-ink-primary';
+        randomBox.classList.add('hidden');
+        customBox.classList.remove('hidden');
+      }
+    }
+
+    function fillSampleCustom() {
+      const num = Math.floor(100 + Math.random() * 899);
+      document.getElementById('customCodeInput').value = `MANOJ${num}`;
+      document.getElementById('customLockInput').value = '54311';
+    }
+
+    function setExpiryChoice(key) {
+      selectedExpiryKey = key;
+      document.querySelectorAll('.exp-btn').forEach(btn => {
+        const exp = btn.getAttribute('data-exp');
+        if (exp === key) {
+          btn.className = 'exp-btn py-2.5 rounded-lg text-[12px] font-bold border-2 border-ink-primary bg-white text-ink-primary transition';
+        } else {
+          btn.className = 'exp-btn py-2.5 rounded-lg text-[12px] font-bold border border-surface-border bg-surface-canvas text-ink-secondary transition';
+        }
+      });
+    }
+
+    function getExpiryDurationMs(key) {
+      switch (key) {
+        case '15d': return { ms: 15 * 24 * 60 * 60 * 1000, label: '15 Days' };
+        case '30d': return { ms: 30 * 24 * 60 * 60 * 1000, label: '30 Days' };
+        case '24h':
+        default: return { ms: 24 * 60 * 60 * 1000, label: '24 Hours' };
+      }
+    }
+
+    // Create Single Air Handler
+    function handleCreateAirSubmit() {
+      const amount = Math.floor(Number(document.getElementById('createAmount').value) || 0);
+      if (amount <= 0) {
+        showToast('Enter a valid amount greater than Rs 0.', 'crimson');
+        return;
+      }
+
+      if (amount > store.senderBalance) {
+        showToast(`Insufficient balance. Need ${formatRs(amount)}, available ${formatRs(store.senderBalance)}.`, 'crimson');
+        return;
+      }
+
+      let customCode = '';
+      let customLock = '';
+
+      if (selectedCodeType === 'custom') {
+        customCode = normalizeCode(document.getElementById('customCodeInput').value);
+        customLock = (document.getElementById('customLockInput').value || '').trim();
+
+        if (customCode.length < 5 || customCode.length > 12) {
+          showToast('Custom code must be 5 to 12 alphanumeric characters.', 'crimson');
+          return;
+        }
+        if (!/^\d{5}$/.test(customLock)) {
+          showToast('Enter a valid 5-digit numeric lock (e.g. 54311).', 'crimson');
+          return;
+        }
+        const exists = store.airs.some(a => normalizeCode(a.code) === customCode);
+        if (exists) {
+          showToast(`Code "${customCode}" is already in use. Choose another.`, 'crimson');
+          return;
+        }
+      }
+
+      const expInfo = getExpiryDurationMs(selectedExpiryKey);
+      const now = Date.now();
+      const code = selectedCodeType === 'custom' ? customCode : generateUnique16Code();
+
+      const newAir = {
+        id: 'air_' + now + '_' + Math.random().toString(36).slice(2, 6),
+        code: code,
+        codeType: selectedCodeType === 'custom' ? 'custom' : 'random',
+        lock: selectedCodeType === 'custom' ? customLock : null,
+        wrongAttempts: 0,
+        lockedUntil: null,
+        amount: amount,
+        status: 'ACTIVE',
+        createdAt: now,
+        expiresAt: now + expInfo.ms,
+        expiryLabel: expInfo.label,
+        redeemedAt: null
+      };
+
+      store.airs.unshift(newAir);
+      store.senderBalance -= amount;
+      saveStore();
+
+      if (selectedCodeType === 'custom') {
+        document.getElementById('customCodeInput').value = '';
+      }
+
+      showToast(`UPI Air created. ${formatRs(amount)} blocked in escrow.`, 'emerald');
+      openAirModalById(newAir.id);
+    }
+
+    // Modal Voucher Logic (Single Voucher)
+    function openAirModalById(airId) {
+      activeModalAirId = airId;
+      renderCurrentModalAir();
+      document.getElementById('airModalOverlay').classList.remove('hidden');
+    }
+
+    function closeAirModal() {
+      document.getElementById('airModalOverlay').classList.add('hidden');
+    }
+
+    function getCurrentModalAir() {
+      return store.airs.find(a => a.id === activeModalAirId) || null;
+    }
+
+    function renderCurrentModalAir() {
+      const air = getCurrentModalAir();
+      if (!air) return;
+
+      document.getElementById('modalAmountText').textContent = formatRs(air.amount);
+      document.getElementById('modalCodeText').textContent = air.code;
+
+      const lockBox = document.getElementById('modalLockBox');
+      if (air.codeType === 'custom' && air.lock) {
+        lockBox.classList.remove('hidden');
+        document.getElementById('modalLockText').textContent = air.lock;
+      } else {
+        lockBox.classList.add('hidden');
+      }
+
+      const stateBadge = document.getElementById('modalStateBadge');
+      const statusDot = document.getElementById('modalStatusDot');
+      const manageRow = document.getElementById('modalActiveManageRow');
+      const testRedeemBtn = document.getElementById('modalTestRedeemBtn');
+      const redeemedBox = document.getElementById('modalRedeemedInfoBox');
+
+      if (air.status === 'ACTIVE') {
+        stateBadge.textContent = 'ACTIVE • ESCROW HELD';
+        stateBadge.className = 'font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-npci-emeraldBg text-npci-emerald border border-npci-emeraldBorder';
+        statusDot.className = 'w-2 h-2 rounded-full bg-npci-emerald';
+        manageRow.classList.remove('hidden');
+        testRedeemBtn.classList.remove('hidden');
+        redeemedBox.classList.add('hidden');
+      } else if (air.status === 'REDEEMED') {
+        stateBadge.textContent = 'REDEEMED';
+        stateBadge.className = 'font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-surface-subtle text-ink-primary border border-surface-borderStrong';
+        statusDot.className = 'w-2 h-2 rounded-full bg-ink-primary';
+        manageRow.classList.add('hidden');
+        testRedeemBtn.classList.add('hidden');
+        redeemedBox.classList.remove('hidden');
+        document.getElementById('modalRedeemedTime').textContent = formatExactTime(air.redeemedAt);
+      } else {
+        stateBadge.textContent = air.status;
+        stateBadge.className = 'font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-surface-subtle text-ink-muted border border-surface-border';
+        statusDot.className = 'w-2 h-2 rounded-full bg-ink-muted';
+        manageRow.classList.add('hidden');
+        testRedeemBtn.classList.add('hidden');
+        redeemedBox.classList.add('hidden');
+      }
+
+      document.getElementById('modalCreatedTimeText').textContent = 'Issued ' + formatShortTime(air.createdAt);
+      document.getElementById('modalExpiryText').textContent =
+        air.status === 'ACTIVE'
+          ? 'Expires in ' + formatRemainingTime(air.expiresAt)
+          : air.status === 'EXPIRED'
+          ? 'Expired (Unblocked)'
+          : air.status === 'CANCELLED'
+          ? 'Cancelled (Unblocked)'
+          : 'Settled';
+    }
+
+    // Clipboard & Native Share
+    function copyTextToClipboard(text, label = 'Copied to clipboard') {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(label, 'navy');
+      } catch (e) {
+        showToast('Copy failed', 'crimson');
+      }
+    }
+
+    function copyCurrentModalCode() {
+      const air = getCurrentModalAir();
+      if (!air) return;
+      copyTextToClipboard(air.code, `Code ${air.code} copied`);
+    }
+
+    function copyCurrentModalLock() {
+      const air = getCurrentModalAir();
+      if (!air || !air.lock) return;
+      copyTextToClipboard(air.lock, `Lock ${air.lock} copied. Share separately.`);
+    }
+
+    async function shareCurrentModalAir() {
+      const air = getCurrentModalAir();
+      if (!air) return;
+      const shareText = `UPI Air Voucher of ${formatRs(air.amount)}\nClaim Code: ${air.code}${air.codeType === 'custom' ? '\n(Requires 5-digit lock — ask sender)' : ''}\nRedeem via UPI Air in any UPI app.`;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `UPI Air • ${formatRs(air.amount)}`,
+            text: shareText
+          });
+          return;
+        } catch (err) {
+          // Fallback to clipboard
+        }
+      }
+      copyTextToClipboard(shareText, 'Share text copied to clipboard');
+    }
+
+    function jumpToRedeemFromModal() {
+      const air = getCurrentModalAir();
+      if (!air) return;
+      closeAirModal();
+      switchTab('redeem');
+
+      const selectEl = document.getElementById('redeemTypeSelect');
+      selectEl.value = air.codeType === 'custom' ? 'custom' : 'random';
+      handleRedeemTypeDropdownChange(selectEl.value, false);
+
+      document.getElementById('redeemCodeInput').value = air.code;
+      handleRedeemCodeInput(air.code);
+    }
+
+    function cancelCurrentModalAir() {
+      const air = getCurrentModalAir();
+      if (!air || air.status !== 'ACTIVE') return;
+      air.status = 'CANCELLED';
+      store.senderBalance += Number(air.amount);
+      saveStore();
+      renderCurrentModalAir();
+      renderMyAirsList();
+      showToast(`Cancelled ${air.code}. ${formatRs(air.amount)} unblocked to Sender A/c.`, 'navy');
+    }
+
+    function expireCurrentModalAirNow() {
+      const air = getCurrentModalAir();
+      if (!air || air.status !== 'ACTIVE') return;
+      air.expiresAt = Date.now() - 1000;
+      checkExpiries(false);
+      renderCurrentModalAir();
+    }
+
+    // =========================================================
+    // REDEEM TAB LOGIC (Dropdown + Single Code Field + Lock)
+    // =========================================================
+    function handleRedeemTypeDropdownChange(typeVal, clearInputs = true) {
+      redeemSelectedType = typeVal; // 'random' | 'custom'
+      const codeLabel = document.getElementById('redeemCodeLabel');
+      const formatHint = document.getElementById('redeemFormatHint');
+      const codeInput = document.getElementById('redeemCodeInput');
+      const lockWrapper = document.getElementById('redeemCustomLockWrapper');
+      const lockInput = document.getElementById('redeemLockInput');
+
+      if (typeVal === 'custom') {
+        codeLabel.textContent = '2. Enter Custom Code';
+        formatHint.textContent = '5–12 alphanumeric chars';
+        codeInput.placeholder = 'e.g. SUNDAY500';
+        lockWrapper.classList.remove('hidden');
+      } else {
+        codeLabel.textContent = '2. Paste 16-Character Alphanumeric Code';
+        formatHint.textContent = 'Case & dash insensitive';
+        codeInput.placeholder = 'XXXX-XXXX-XXXX-XXXX';
+        lockWrapper.classList.add('hidden');
+      }
+
+      if (clearInputs) {
+        codeInput.value = '';
+        if (lockInput) lockInput.value = '';
+      }
+
+      renderRedeemQuickSuggestions();
+      handleRedeemCodeInput(codeInput.value);
+    }
+
+    function renderRedeemQuickSuggestions() {
+      const bar = document.getElementById('redeemQuickSuggestions');
+      const activeAirs = store.airs.filter(a => a.status === 'ACTIVE');
+      if (activeAirs.length === 0) {
+        bar.innerHTML = `<span class="text-[11px] text-ink-muted">No active vouchers — create one on the Create tab.</span>`;
+        return;
+      }
+      bar.innerHTML = activeAirs.map(a => `
+        <button
+          type="button"
+          onclick="fillRedeemDemoAir('${a.id}')"
+          class="shrink-0 font-mono text-[11px] font-bold px-2.5 py-1 rounded border transition flex items-center gap-1.5 ${
+            a.codeType === 'custom'
+              ? 'bg-npci-ochreBg border-npci-ochreBorder text-npci-ochre hover:bg-amber-100'
+              : 'bg-surface-canvas border-surface-borderStrong text-ink-primary hover:bg-surface-subtle'
+          }"
+        >
+          <span>${a.code}</span>
+          <span class="font-sans font-bold text-ink-secondary tabular-nums">(${formatRs(a.amount)})</span>
+        </button>
+      `).join('');
+    }
+
+    function fillRedeemDemoAir(airId) {
+      const air = store.airs.find(a => a.id === airId);
+      if (!air) return;
+
+      const selectEl = document.getElementById('redeemTypeSelect');
+      const targetType = air.codeType === 'custom' ? 'custom' : 'random';
+      if (selectEl.value !== targetType) {
+        selectEl.value = targetType;
+        handleRedeemTypeDropdownChange(targetType, false);
+      }
+
+      const input = document.getElementById('redeemCodeInput');
+      input.value = air.code;
+      handleRedeemCodeInput(air.code);
+    }
+
+    function clearRedeemInput() {
+      document.getElementById('redeemCodeInput').value = '';
+      const lockInput = document.getElementById('redeemLockInput');
+      if (lockInput) lockInput.value = '';
+      handleRedeemCodeInput('');
+    }
+
+    function handleRedeemLockInput() {
+      updateRedeemButtonState();
+    }
+
+    function findAirByTypedCode(rawInput) {
+      const clean = normalizeCode(rawInput);
+      if (!clean) return null;
+      return store.airs.find(a => normalizeCode(a.code) === clean) || null;
+    }
+
+    function handleRedeemCodeInput(rawVal) {
+      checkExpiries(true);
+      const clearBtn = document.getElementById('clearRedeemCodeBtn');
+      const clean = normalizeCode(rawVal);
+
+      if (rawVal && rawVal.length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+
+      const container = document.getElementById('redeemLookupContainer');
+
+      if (!clean) {
+        container.innerHTML = '';
+        updateRedeemButtonState();
+        return;
+      }
+
+      const air = findAirByTypedCode(clean);
+
+      if (!air) {
+        container.innerHTML = `
+          <div class="bg-white border border-surface-border rounded-xl p-3.5 flex items-center justify-between">
+            <div>
+              <div class="text-[12px] font-bold text-ink-primary">Code <span class="font-mono">${clean}</span> not found</div>
+              <div class="text-[11px] text-ink-muted mt-0.5">Verify the code characters or select a sample voucher above.</div>
+            </div>
+            <span class="font-mono text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-surface-subtle text-ink-secondary">INVALID</span>
+          </div>
+        `;
+        updateRedeemButtonState();
+        return;
+      }
+
+      // Check Dropdown vs Air Type mismatch
+      if (air.codeType !== redeemSelectedType) {
+        const expectedLabel = air.codeType === 'custom'
+          ? 'Custom Code (+ 5-Digit Lock)'
+          : 'Alphanumeric Code (16-char)';
+        container.innerHTML = `
+          <div class="bg-npci-ochreBg border border-npci-ochreBorder rounded-xl p-3.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[12px] font-bold text-npci-ochre">Code Type Mismatch</span>
+              <button
+                type="button"
+                onclick="fillRedeemDemoAir('${air.id}')"
+                class="text-[11px] font-bold bg-ink-primary text-white px-2.5 py-1 rounded"
+              >
+                Switch Type
+              </button>
+            </div>
+            <p class="text-[11px] text-ink-secondary mt-1">
+              <span class="font-mono font-bold text-ink-primary">${air.code}</span> requires dropdown mode: <strong>${expectedLabel}</strong>.
+            </p>
+          </div>
+        `;
+        updateRedeemButtonState();
+        return;
+      }
+
+      // Race states: ALREADY REDEEMED, EXPIRED, CANCELLED
+      if (air.status === 'REDEEMED') {
+        container.innerHTML = `
+          <div class="bg-npci-crimsonBg border border-npci-crimsonBorder rounded-xl p-3.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[11px] font-bold uppercase tracking-wider text-npci-crimson">Already Redeemed</span>
+              <span class="text-[13px] font-extrabold text-npci-crimson tabular-nums">${formatRs(air.amount)}</span>
+            </div>
+            <p class="text-[12px] text-ink-primary font-semibold mt-1">
+              Claimed on ${formatExactTime(air.redeemedAt)}.
+            </p>
+            <p class="text-[11px] text-ink-secondary mt-0.5">First successful claim settles the escrow immediately.</p>
+          </div>
+        `;
+        updateRedeemButtonState();
+        return;
+      }
+
+      if (air.status === 'EXPIRED' || air.status === 'CANCELLED') {
+        container.innerHTML = `
+          <div class="bg-surface-subtle border border-surface-borderStrong rounded-xl p-3.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[11px] font-bold uppercase tracking-wider text-ink-secondary">${air.status}</span>
+              <span class="text-[13px] font-extrabold text-ink-secondary tabular-nums">${formatRs(air.amount)}</span>
+            </div>
+            <p class="text-[12px] text-ink-primary font-semibold mt-1">
+              ${air.status === 'EXPIRED' ? 'Expired — funds were automatically unblocked to the sender.' : 'Cancelled by sender — funds unblocked.'}
+            </p>
+          </div>
+        `;
+        updateRedeemButtonState();
+        return;
+      }
+
+      // Check 10-minute security lockout after 3 wrong lock attempts
+      const now = Date.now();
+      if (air.lockedUntil && now < air.lockedUntil) {
+        const remMins = Math.ceil((air.lockedUntil - now) / 60000);
+        container.innerHTML = `
+          <div class="bg-npci-crimsonBg border border-npci-crimsonBorder rounded-xl p-3.5">
+            <div class="font-mono text-[11px] font-bold uppercase text-npci-crimson">
+              LOCKED FOR 10 MINUTES • 3 FAILED ATTEMPTS
+            </div>
+            <p class="text-[12px] text-ink-primary mt-1">
+              Voucher <span class="font-mono font-bold">${air.code}</span> is temporarily locked due to 3 wrong lock entries. Try again in <strong>${remMins} min (${formatRemainingTime(air.lockedUntil)})</strong>.
+            </p>
+          </div>
+        `;
+        updateRedeemButtonState();
+        return;
+      } else if (air.lockedUntil && now >= air.lockedUntil) {
+        air.lockedUntil = null;
+        air.wrongAttempts = 0;
+        saveStore();
+      }
+
+      // ACTIVE Voucher Verified
+      if (air.codeType === 'custom') {
+        const triesLeft = Math.max(0, 3 - (air.wrongAttempts || 0));
+        container.innerHTML = `
+          <div class="bg-white border border-surface-borderStrong rounded-xl p-3.5 flex items-center justify-between">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-npci-ochre"></span>
+                <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-npci-ochre">Lock Required</span>
+              </div>
+              <div class="text-xl font-extrabold text-ink-primary tabular-nums mt-0.5">${formatRs(air.amount)}</div>
+              <div class="text-[11px] text-ink-secondary mt-0.5">Enter 5-digit digital lock above to claim</div>
+            </div>
+            <div class="text-right font-mono">
+              <div class="text-[11px] font-bold text-ink-primary">${triesLeft}/3 tries left</div>
+              <div class="text-[10px] text-ink-muted">Exp: ${formatRemainingTime(air.expiresAt)}</div>
+            </div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="bg-npci-emeraldBg border border-npci-emeraldBorder rounded-xl p-3.5 flex items-center justify-between">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-npci-emerald"></span>
+                <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-npci-emerald">Verified Active Escrow</span>
+              </div>
+              <div class="text-xl font-extrabold text-ink-primary tabular-nums mt-0.5">${formatRs(air.amount)}</div>
+              <div class="text-[11px] text-ink-secondary mt-0.5">Ready for instant settlement</div>
+            </div>
+            <div class="text-right font-mono text-[11px] font-bold text-npci-emerald">
+              <div>Exp in ${formatRemainingTime(air.expiresAt)}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      updateRedeemButtonState();
+    }
+
+    function updateRedeemButtonState() {
+      const btn = document.getElementById('redeemSubmitBtn');
+      const btnText = document.getElementById('redeemSubmitBtnText');
+      const rawCode = document.getElementById('redeemCodeInput').value;
+      const air = findAirByTypedCode(rawCode);
+
+      if (!air || air.status !== 'ACTIVE' || air.codeType !== redeemSelectedType) {
+        btn.disabled = true;
+        btnText.textContent = 'Enter a Valid Code to Redeem';
+        return;
+      }
+
+      const now = Date.now();
+      if (air.lockedUntil && now < air.lockedUntil) {
+        btn.disabled = true;
+        btnText.textContent = 'Temporarily Locked (10m)';
+        return;
+      }
+
+      if (air.codeType === 'custom') {
+        const lockInput = document.getElementById('redeemLockInput');
+        const lockVal = lockInput ? lockInput.value.trim() : '';
+        if (lockVal.length < 5) {
+          btn.disabled = true;
+          btnText.textContent = `Enter 5-Digit Lock to Redeem ${formatRs(air.amount)}`;
+          return;
+        }
+      }
+
+      btn.disabled = false;
+      btnText.textContent = `Redeem ${formatRs(air.amount)}`;
+    }
+
+    function handleRedeemSubmit() {
+      checkExpiries(false);
+      const rawCode = document.getElementById('redeemCodeInput').value;
+      const air = findAirByTypedCode(rawCode);
+
+      if (!air) {
+        showToast('Invalid UPI Air code.', 'crimson');
+        return;
+      }
+
+      if (air.codeType !== redeemSelectedType) {
+        showToast('Select the matching Code Type in the dropdown.', 'ochre');
+        return;
+      }
+
+      if (air.status === 'REDEEMED') {
+        showToast('Already redeemed.', 'crimson');
+        handleRedeemCodeInput(rawCode);
+        return;
+      }
+
+      if (air.status !== 'ACTIVE') {
+        showToast(`This Air is ${air.status}.`, 'crimson');
+        handleRedeemCodeInput(rawCode);
+        return;
+      }
+
+      const now = Date.now();
+      if (air.lockedUntil && now < air.lockedUntil) {
+        showToast('Temporarily locked for 10 minutes.', 'crimson');
+        handleRedeemCodeInput(rawCode);
+        return;
+      }
+
+      // Validate 5-digit lock for Custom Air
+      if (air.codeType === 'custom') {
+        const lockEl = document.getElementById('redeemLockInput');
+        const enteredLock = lockEl ? lockEl.value.trim() : '';
+
+        if (enteredLock !== air.lock) {
+          air.wrongAttempts = (air.wrongAttempts || 0) + 1;
+
+          if (air.wrongAttempts >= 3) {
+            air.lockedUntil = Date.now() + 10 * 60 * 1000;
+            saveStore();
+            showToast('3 incorrect lock attempts. Locked for 10 minutes.', 'crimson');
+          } else {
+            const left = 3 - air.wrongAttempts;
+            saveStore();
+            showToast(`Incorrect 5-digit lock. ${left} attempt(s) left.`, 'ochre');
+          }
+          if (lockEl) lockEl.value = '';
+          handleRedeemCodeInput(rawCode);
+          return;
+        }
+      }
+
+      // Settle Funds
+      air.status = 'REDEEMED';
+      air.redeemedAt = Date.now();
+      store.receiverBalance += Number(air.amount);
+      saveStore();
+
+      document.getElementById('successAmountTitle').textContent = `${formatRs(air.amount)} received`;
+      document.getElementById('successClaimedCode').textContent = air.code;
+
+      document.getElementById('redeemSuccessModal').classList.remove('hidden');
+      const lockEl = document.getElementById('redeemLockInput');
+      if (lockEl) lockEl.value = '';
+      renderRedeemQuickSuggestions();
+      handleRedeemCodeInput(rawCode);
+    }
+
+    function closeRedeemSuccessModal() {
+      document.getElementById('redeemSuccessModal').classList.add('hidden');
+      clearRedeemInput();
+    }
+
+    // =========================================================
+    // MY AIRS LEDGER TAB
+    // =========================================================
+    function setMyAirsFilter(filter) {
+      myAirsFilter = filter;
+      document.querySelectorAll('.filter-pill').forEach(btn => {
+        if (btn.getAttribute('data-filter') === filter) {
+          btn.className = 'filter-pill py-1.5 rounded-lg text-[11px] font-bold bg-ink-primary text-white transition';
+        } else {
+          btn.className = 'filter-pill py-1.5 rounded-lg text-[11px] font-bold text-ink-secondary hover:text-ink-primary transition';
+        }
+      });
+      renderMyAirsList();
+    }
+
+    function renderMyAirsList() {
+      const container = document.getElementById('myAirsListContainer');
+      const filtered = store.airs.filter(a => {
+        if (myAirsFilter === 'ALL') return true;
+        if (myAirsFilter === 'ACTIVE') return a.status === 'ACTIVE';
+        if (myAirsFilter === 'REDEEMED') return a.status === 'REDEEMED';
+        if (myAirsFilter === 'INACTIVE') return a.status === 'EXPIRED' || a.status === 'CANCELLED';
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white border border-surface-border rounded-xl p-8 text-center">
+            <p class="text-[13px] font-bold text-ink-primary">No vouchers in this filter</p>
+            <p class="text-[11px] text-ink-muted mt-0.5">Created UPI Air vouchers appear here in chronological order.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(air => {
+        let badgeHtml = '';
+        if (air.status === 'ACTIVE') {
+          badgeHtml = `<span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-npci-emeraldBg text-npci-emerald border border-npci-emeraldBorder">ACTIVE</span>`;
+        } else if (air.status === 'REDEEMED') {
+          badgeHtml = `<span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-surface-subtle text-ink-primary border border-surface-borderStrong">REDEEMED</span>`;
+        } else if (air.status === 'EXPIRED') {
+          badgeHtml = `<span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-npci-ochreBg text-npci-ochre border border-npci-ochreBorder">EXPIRED</span>`;
+        } else {
+          badgeHtml = `<span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-surface-subtle text-ink-muted border border-surface-border">CANCELLED</span>`;
+        }
+
+        const typeTag = air.codeType === 'custom'
+          ? `<span class="font-mono text-[10px] font-semibold text-npci-ochre bg-npci-ochreBg border border-npci-ochreBorder px-1.5 py-0.2 rounded">CUSTOM+LOCK</span>`
+          : `<span class="font-mono text-[10px] font-semibold text-ink-secondary bg-surface-canvas border border-surface-border px-1.5 py-0.2 rounded">16-CHAR</span>`;
+
+        const metaLine = air.status === 'REDEEMED'
+          ? `<div class="text-[11px] text-npci-emerald font-semibold mt-1.5 font-mono">✓ Claimed ${formatExactTime(air.redeemedAt)} • Credited to A/c •••• 8910</div>`
+          : air.status === 'ACTIVE'
+          ? `<div class="text-[11px] text-ink-secondary mt-1.5 font-mono">Created ${formatShortTime(air.createdAt)} • Expires in ${formatRemainingTime(air.expiresAt)}</div>`
+          : `<div class="text-[11px] text-ink-muted mt-1.5 font-mono">Created ${formatShortTime(air.createdAt)} • Unblocked to A/c •••• 4821</div>`;
+
+        return `
+          <div
+            onclick="openAirModalById('${air.id}')"
+            class="bg-white hover:border-ink-primary active:translate-y-px transition rounded-xl p-3.5 border border-surface-border cursor-pointer"
+          >
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-[16px] font-extrabold text-ink-primary tabular-nums">${formatRs(air.amount)}</span>
+                ${typeTag}
+              </div>
+              ${badgeHtml}
+            </div>
+
+            <div class="mt-1.5 flex items-center justify-between">
+              <span class="font-mono text-[13px] font-bold text-ink-primary tracking-wider">${air.code}</span>
+              <span class="font-mono text-[10px] text-ink-muted">Tap for voucher →</span>
+            </div>
+
+            ${metaLine}
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================
+    // RESET DEMO MODAL
+    // =========================================================
+    function openResetConfirm() {
+      document.getElementById('resetConfirmModal').classList.remove('hidden');
+    }
+
+    function closeResetConfirm() {
+      document.getElementById('resetConfirmModal').classList.add('hidden');
+    }
+
+    function confirmResetDemo() {
+      localStorage.removeItem(STORAGE_KEY);
+      store = createInitialStore();
+      saveStore();
+      closeResetConfirm();
+      closeAirModal();
+      clearRedeemInput();
+      renderMyAirsList();
+      renderRedeemQuickSuggestions();
+      switchTab('create');
+      showToast('Demo reset. Sender restored to Rs 10,000.', 'navy');
+    }
+
+    // =========================================================
+    // TIME UTILITIES & TOASTS
+    // =========================================================
+    function formatShortTime(ts) {
+      if (!ts) return '';
+      const diffSec = Math.max(0, Math.floor((Date.now() - ts) / 1000));
+      if (diffSec < 45) return 'just now';
+      if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
+      const d = new Date(ts);
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function formatExactTime(ts) {
+      if (!ts) return '';
+      const d = new Date(ts);
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    function formatRemainingTime(targetTs) {
+      const diffMs = targetTs - Date.now();
+      if (diffMs <= 0) return '0s';
+      const sec = Math.ceil(diffMs / 1000);
+      if (sec < 60) return `${sec}s`;
+      const mins = Math.ceil(sec / 60);
+      if (mins < 60) return `${mins}m`;
+      const hrs = Math.round(mins / 60);
+      if (hrs < 48) return `${hrs}h`;
+      return `${Math.round(hrs / 24)}d`;
+    }
+
+    function showToast(message, tone = 'navy') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const toneStyles = {
+        navy: 'bg-ink-primary text-white border-slate-700',
+        emerald: 'bg-npci-emerald text-white border-emerald-900',
+        crimson: 'bg-npci-crimson text-white border-rose-900',
+        ochre: 'bg-npci-ochre text-white border-amber-900'
+      };
+      toast.className = `px-3.5 py-2.5 rounded-lg border shadow-md text-[12px] font-semibold flex items-center justify-between animate-sheet ${toneStyles[tone] || toneStyles.navy}`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.15s ease';
+        setTimeout(() => toast.remove(), 180);
+      }, 2600);
+    }
+
+    // Boot Application
+    window.addEventListener('DOMContentLoaded', () => {
+      loadStore();
+      updateBalanceIndicators();
+      handleCreateAmountChange();
+      handleRedeemTypeDropdownChange('random', true);
+      renderMyAirsList();
+
+      setInterval(() => {
+        checkExpiries(false);
+        if (!document.getElementById('airModalOverlay').classList.contains('hidden')) {
+          const air = getCurrentModalAir();
+          if (air && air.status === 'ACTIVE') {
+            document.getElementById('modalExpiryText').textContent = 'Expires in ' + formatRemainingTime(air.expiresAt);
+          }
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
